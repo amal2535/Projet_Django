@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Exam</h4>
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <form method="POST" action="" class="form-sample">
+                      {% csrf_token %}
+                      
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Start Date of Revision</label>
+                            <div class="col-sm-9">
+                              <input type="date" name="debut_revision" class="form-control" id="datematiere">
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Subject</label>
+                            <div class="col-sm-9">
+                              <select name="matiere" id="matiere" class="form-control">
+                                <option disabled selected hidden>Select a Subject</option>
+                                <option value="Unix">Unix</option>
+                                <option value="Algo1">Algo1</option>
+                                <option value="Algo2">Algo2</option>
+                                <option value="ADF">ADF</option>
+                                <option value="Analys_num">Analys_num</option>
+                                <option value="Arch_Micro">Arch_Micro</option>
+                                <option value="BD">BD</option>
+                                <option value="CCNA">CCNA</option>
+                                <option value="Calcul_Sc">Calcul_Sc</option>
+                                <option value="CCCA1">CCCA1</option>
+                                <option value="CCCA2">CCCA2</option>
+                                <option value="CCCA3">CCCA3</option>
+                                <option value="CCCF1">CCCF1</option>
+                                <option value="CCCF2">CCCF2</option>
+                                <option value="CCCF3">CCCF3</option>
+                                <option value="Java">Java</option>
+                                <option value="Env_entreprise">Env_entreprise</option>
+                                <option value="Fond_RX">Fond_RX</option>
+                                <option value="GL">GL</option>
+                                <option value="IPNet_routing">IPNet_routing</option>
+                                <option value="Multimedia">Multimedia</option>
+                                <option value="UML">UML</option>
+                                <option value="MB1">MB1</option>
+                                <option value="MB2">MB2</option>
+                                <option value="MB3">MB3</option>
+                                <option value="MB4">MB4</option>
+                                <option value="POO_Cplus">POO_Cplus</option>
+                                <option value="ProgProc1">ProgProc1</option>
+                                <option value="ProgProc2">ProgProc2</option>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Rx_comm">Rx_comm</option>
+                                <option value="Switched_Networks">Switched_Networks</option>
+                                <option value="IP_essentials">IP_essentials</option>
+                                <option value="SGBD">SGBD</option>
+                                <option value="SysRX">SysRX</option>
+                                <option value="Sys_Scripting">Sys_Scripting</option>
+                                <option value="Proba">Proba</option>
+                                <option value="Tech_Web">Tech_Web</option>
+                                <option value="TLA">TLA</option>
+                                <option value="Electronique">Electronique</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Coefficient</label>
+                            <div class="col-sm-9">
+                                <select name="coefficient" id="coefficient" class="form-control">
+                                  <option disabled selected hidden>Select a Coefficient</option>
+                                  <option value="Coeff1">Coeff1</option>
+                                  <option value="Coeff1,5">Coeff1,5</option>
+                                  <option value="Coeff2">Coeff2</option>
+                                  <option value="Coeff3">Coeff3</option>
+                                  <option value="Coeff4">Coeff4</option>
+                                  <option value="Coeff5">Coeff5</option>
+                                  <option value="Coeff7">Coeff7</option>
+                                  <option value="Coeff8">Coeff8</option>
+                                </select>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Test Date</label>
+                            <div class="col-sm-9">
+                              <input type="date" name="date_examen" class="form-control" id="datematiere">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Level</label>
+                            <div class="col-sm-9">
+                              <select name="niveau" id="niveau" class="form-control">
+                                <option disabled selected hidden>Select a Level</option>
+                                <option value="Niv1">NVFaible</option>
+                                <option value="Niv2">NVFort</option>
+                                <option value="Niv3">NVM</option>
+                                <option value="Niv4">NVTF</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group row justify-content-end mt-5">
+                            <div class="col-sm-4 offset-sm-4">
+                              <button type="submit" class="button" onclick="redirectToCalendar()">Generate</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script> 
+  function  redirectToCalendar() {
+      window.location.href = "{% url 'calendar' %}";
+  }
+</script>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+

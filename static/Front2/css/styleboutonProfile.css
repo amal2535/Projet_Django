@@ -1,0 +1,31 @@
+.button, .center-wrap button button {
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding: 10px 4px;
+    text-align: center;
+    max-width: 180px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #ed1c24;
+    background-color: #ed1c24; /* Couleur rouge */
+    color: #fff; /* Texte blanc */
+}
+
+.button::after, .center-wrap button button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%; /* Départ en dehors du bouton */
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, transparent 25%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, transparent 75%);
+    transition: left 0.5s ease-in-out; /* Animation à vitesse moyenne */
+}
+
+.button:hover::after, .center-wrap button button:hover::after {
+    left: 100%; /* Déplacement de la bande à travers le bouton */
+}

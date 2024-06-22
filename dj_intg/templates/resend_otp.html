@@ -1,0 +1,89 @@
+
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>ESPRITSCHED</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'Front2/vendors/feather/feather.css' %}"> 
+  <link rel="stylesheet" href="{% static 'Front2/vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'Front2/vendors/css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'Front2/css/vertical-layout-light/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'Front2/images/flacon2.png' %}" />
+<style>
+    form{
+        width: 500px;
+        height: auto;
+        padding: 20px 20px 20px 20px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        margin: 50px auto;
+        border-radius: 10px;
+    }
+    form p{
+        text-align: center;
+    }
+
+    form h3{
+        text-align: center
+    }
+</style>
+
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-center auth px-0">
+        <div class="row w-100 mx-0">
+          <div class="col-lg-4 mx-auto">
+            <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+              <div class="brand-logo">
+                <img src="{% static 'Front1/images/logo2.png' %}" alt="logo">
+              </div>
+<div class="form-container">
+    <form action="" method='POST'>
+        {% csrf_token %}
+        <h3><strong>Resend OTP</strong></h3>
+        <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-control" name="otp_email" placeholder="Enter email-address">
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="button">Send OTP</button>
+        </div>
+
+    </form>
+
+</div>
+</div>
+</div>
+</div>
+<!-- content-wrapper ends -->
+</div>
+<!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+</div>
+  <!-- plugins:js -->
+  <script src="{% static 'Front2/vendors/js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="{% static 'Front2/js/off-canvas.js' %}"></script>
+  <script src="{% static 'Front2/js/hoverable-collapse.js' %}"></script>
+  <script src="{% static 'Front2/js/template.js' %}"></script>
+  <script src="{% static 'Front2/js/settings.js' %}"></script>
+  <script src="{% static 'Front2/js/todolist.js' %}"></script>
+  <!-- endinject -->
+</body>
+
+</html>

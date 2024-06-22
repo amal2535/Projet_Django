@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row justify-content-center">
+      <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Update Profile</h4>
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              
+              <!-- Avatar -->
+              <div class="d-flex justify-content-center mb-4">
+                <img id="selectedAvatar" src="{{ user.profile.avatar.url|default:'https://bootdey.com/img/Content/avatar/avatar7.png' }}" class="rounded-circle" style="width: 150px;" alt="avatar placeholder" />
+              </div>
+              <div class="d-flex justify-content-center mb-4">
+                <div data-mdb-ripple-init class="btn btn-dark btn-rounded">
+                  <label class="form-label text-white m-1" for="avatarInput">Choose your avatar</label>
+                  <input type="file" class="form-control d-none" id="avatarInput" name="avatar" accept="image/*" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                </div>
+              </div>
+
+              <!-- Form fields -->
+              <div class="form-group">
+                <label for="exampleInputUsername1">Name</label>
+                <input type="text" class="form-control" id="exampleInputUsername1" name="username" value="{{ user.username }}" placeholder="Name">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email Address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" name="email" value="{{ user.email }}" placeholder="Email">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password">
+              </div>
+              
+              <button type="submit" class="button">Update</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function displaySelectedImage(event, elementId) {
+    const selectedImage = document.getElementById(elementId);
+    const fileInput = event.target;
+
+    if (fileInput.files && fileInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        selectedImage.src = e.target.result;
+        selectedImage.style.display = 'block';
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    }
+  }
+</script>
+{% endblock %}
