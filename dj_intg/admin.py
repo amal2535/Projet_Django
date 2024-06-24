@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import *
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Account 
+from .models import Profile 
 from .models import Progress
 # from .models import UserEsprit
 # Register your models here.
@@ -47,4 +47,4 @@ class OtpTokenAdmin(admin.ModelAdmin):
 admin.site.register(OtpToken, OtpTokenAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Progress)
-admin.site.register(Account)
+admin.site.register(Profile)

@@ -4,8 +4,9 @@ from django.dispatch import receiver
 from .models import OtpToken
 from django.core.mail import send_mail
 from django.utils import timezone
+from .models import CustomUser, Profile
 
- 
+    
 @receiver(post_save, sender=settings.AUTH_USER_MODEL) 
 def create_token(sender, instance, created, **kwargs):
     if created:

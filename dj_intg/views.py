@@ -10,26 +10,20 @@ from sklearn.ensemble import GradientBoostingClassifier
 from dj_intg.form import  ProgressForm
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Account,Progress
-from django.contrib.auth import authenticate, login,logout
-from django.shortcuts import render
-from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Profile,Progress
+
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from joblib import load
-from django.http import HttpRequest
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib import messages
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from datetime import timedelta
-from django.http import HttpResponse  
+ 
 from django.utils.encoding import  force_str
 from django.contrib.auth.models import User  
-from django.core.mail import EmailMessage 
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib.auth.tokens import default_token_generator
@@ -37,8 +31,7 @@ from django.utils.encoding import force_str
 force_str(User.pk)
 import datetime as dt
 import joblib
-from django.shortcuts import render, redirect
-from .form import PasswordResetForm, PasswordResetRequestForm, RegisterForm
+from .form import AvatarUpdateForm, PasswordResetForm, PasswordResetRequestForm, RegisterForm
 from .models import OtpToken
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -46,25 +39,17 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from datetime import datetime, timedelta
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
+from datetime import datetime
+from rest_framework.decorators import api_view
 import jwt
 import datetime
 from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
 from .form import RegisterForm
 from .models import OtpToken, CustomUser
 from django.contrib.auth.tokens import default_token_generator
@@ -74,7 +59,10 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
 from django.core.mail import EmailMultiAlternatives
-
+from django.contrib.auth.decorators import login_required
+from .form import UpdateProfileForm, ChangePasswordForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 # Create your views here.
@@ -109,21 +97,20 @@ def progress(request):
 
 
 
-@api_view(['POST','GET'])
+@api_view(['POST', 'GET'])
 def register(request):
     form = RegisterForm()
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             messages.success(request, "Account created successfully! An OTP was sent to your Email")
-            return redirect("verify-email", username=request.POST['username'])
+            return redirect("verify-email", username=user.username)
     context = {"form": form}
     return render(request, "register.html", context)
 
-
 @api_view(['POST', 'GET'])
-def verify_email(request,username):
+def verify_email(request, username):
     if request.method == 'POST':
         user = get_object_or_404(get_user_model(), username=username)
         user_otp = OtpToken.objects.filter(user=user).last()
@@ -138,19 +125,20 @@ def verify_email(request,username):
                 payload = {
                     'user_id': user.id,
                     'username': user.username,
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),  # Token expires in 1 day
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
                 }
                 token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm='HS256')
 
-                return render(request, "verify_success.html", {'token': token})
+                login(request, user)
+                messages.success(request, f"Welcome {user.username}!")
+                return redirect("indexS")
 
             else:
                 messages.warning(request, "The OTP has expired, get a new OTP!")
-                return Response({'detail': "The OTP has expired, get a new OTP!"}, status=status.HTTP_400_BAD_REQUEST)
-
+                return redirect("verify-email", username=username)
         else:
             messages.warning(request, "Invalid OTP entered, enter a valid OTP!")
-            return Response({'detail': "Invalid OTP entered, enter a valid OTP!"}, status=status.HTTP_400_BAD_REQUEST)
+            return redirect("verify-email", username=username)
 
     return render(request, "verify_token.html", {})
 
@@ -163,7 +151,6 @@ def resend_otp(request):
             for user in users:
                 otp = OtpToken.objects.create(user=user, otp_expires_at=timezone.now() + timezone.timedelta(minutes=5))
                 
-                # Email variables
                 subject = "Email Verification"
                 message = f"""
                 Hi {user.username}, here is your OTP {otp.otp_code} 
@@ -176,7 +163,7 @@ def resend_otp(request):
                 send_mail(
                     subject,
                     message,
-                    None,  # Sender is optional, it will use the default from settings
+                    None,
                     receiver,
                     fail_silently=False,
                 )
@@ -200,19 +187,21 @@ def signin(request):
 
         if user is not None:
             login(request, user)
-
-            payload = {
-                'user_id': user.id,
-                'username': user.username,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-            }
-            token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm='HS256')
-
-            return render(request, "signin_success.html", {'token': token})
+            return redirect("indexS")
         else:
-            return Response({'detail': "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+            messages.warning(request, "Invalid credentials")
+            return redirect("login")
 
     return render(request, 'login.html')
+
+# Logout function
+@api_view(['POST', 'GET'])
+def logout_view(request):
+    logout(request)
+    messages.info(request, "You have been logged out successfully.")
+    return redirect("login")
+
+
 def password_reset_request(request):
     if request.method == 'POST':
         form = PasswordResetRequestForm(request.POST)
@@ -228,7 +217,6 @@ def password_reset_request(request):
                     'reset_link': reset_link,
                 })
 
-                # Send email
                 email_subject = 'Password Reset Request'
                 email_body = message
                 email = EmailMultiAlternatives(subject=email_subject, body=email_body, to=[email])
@@ -267,11 +255,62 @@ def password_reset_confirm(request, uidb64, token):
     return render(request, 'password_reset_confirm.html', {'form': form})
 
 
+
+@login_required
+def update_profile_info(request):
+    user = request.user
+    if not user.is_staff:
+        Profile.objects.get_or_create(user=user) 
+    
+    if request.method == 'POST':
+        form = UpdateProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  
+    else:
+        form = UpdateProfileForm(instance=user)
+    
+    context = {'form': form}
+    if not user.is_staff:
+        context['profile'] = user.profile
+    
+    return render(request, 'profile.html', context)
+
+
+@login_required
+def update_avatar(request):
+    if request.method == 'POST':
+        form = AvatarUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = AvatarUpdateForm(instance=request.user.profile)
+    return render(request, 'update_avatar.html', {'form': form})
+
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'profile.html', {'form': form})
+
+    
+
+
 def calendar(request):
-    # Logic to retrieve data or perform actions for the calendar page
-    # Example:
+
     context = {
-        # Add context data if needed
     }
     return render(request, 'calendar.html', context)
 
@@ -331,9 +370,6 @@ matiere_names = {
     '38': "Théorie des langages(TLA)"
 }
 
-
-
-
 def examSchedule(request):
     predh = None  # Use None as the initial value to indicate no prediction yet
     prediction_made = False
@@ -357,7 +393,6 @@ def examSchedule(request):
         data['Niveau_Etudiant'] = int(niveau)
         data['Matière'] = int(matiere)
         data['Coeifficient'] = int(coefficient)
-        matiere_name = matiere_names.get(matiere, 'Unknown')
 
         # Convertissez les chaînes en objets datetime
         if debut_revision_str and date_examen_str:
@@ -381,7 +416,7 @@ def examSchedule(request):
         # Effectuer la prédiction
         predh = model_ann.predict(df.values)
         predh = int(predh[0])  # Assurez-vous de convertir en entier
-        predhfin=predh
+
         # Conversion de predh en jours et demi-journées
         jours = predh // 8
         heures_restantes = predh % 8
@@ -390,7 +425,7 @@ def examSchedule(request):
             demi_journee = False
         else:
             demi_journee = True
-        
+
         # Résultat final en jours et demi-journées
         if demi_journee:
             if jours == 0:
@@ -406,10 +441,10 @@ def examSchedule(request):
             user=request.user,
             exam_date=date_examen,
             revision_start_date=debut_revision,
-            matiere=matiere_name,
+            matiere=matiere,
             niveau=niveau,
-            days_predicted=0,
-            hours_predicted=predhfin,
+            days_predicted=jours,
+            hours_predicted=heures_restantes,
             days_suivi=0,
             hours_suivi=0,
             jours_rev=difference_jours
@@ -419,6 +454,7 @@ def examSchedule(request):
         prediction_made = True
 
     return render(request, 'examSchedule.html', {'predh': predh, 'prediction_made': prediction_made})
+
 
 
 @login_required

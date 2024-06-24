@@ -131,6 +131,20 @@
                       </div>
                     </form>
                   </div>
+                  <center>
+                  
+                    <div>
+                      {% if predj != 0 %}
+                      <!-- <p class="result">Temps idéal de révision en jours : <span style="color: #ed1c24; font-weight: bold;">{{ predj }}
+                          jours</span></p> -->
+                      <br>
+                      {% if prediction_made %}
+                      <p class="result">Temps idéal de révision en heures : <span style="color: #ed1c24; font-weight: bold;">{{ predh }}
+                          </span></p>
+                          {% endif %}
+                      {% endif %}
+                    </div>
+                  </center>
                 </div>
               </div>
             </div>
@@ -141,15 +155,9 @@
   </div>
 </div>
 
-<script> 
-  function  redirectToCalendar() {
-      window.location.href = "{% url 'calendar' %}";
-  }
-</script>
 
 
 {% endblock %}
-
 
 
 

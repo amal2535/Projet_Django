@@ -3,9 +3,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import  Progress
 from django import forms
+from django.contrib.auth.forms import PasswordChangeForm
 
 from django.contrib.auth import get_user_model 
 from django.contrib.auth.forms import SetPasswordForm
+from django import forms
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from .models import CustomUser, Profile
 
 
 class RegisterForm(UserCreationForm):
@@ -25,7 +29,42 @@ class PasswordResetRequestForm(forms.Form):
 class PasswordResetForm(SetPasswordForm):
     new_password1 = forms.CharField(label="New password", widget=forms.PasswordInput)
     new_password2 = forms.CharField(label="Confirm new password", widget=forms.PasswordInput)
-     
+    
+class UpdateProfileForm(forms.ModelForm):
+    avatar = forms.ImageField(required=False)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateProfileForm, self).__init__(*args, **kwargs)
+        if not self.instance.is_staff:
+            profile, created = Profile.objects.get_or_create(user=self.instance)
+            self.fields['avatar'].initial = profile.avatar
+
+    def save(self, commit=True):
+        user = super(UpdateProfileForm, self).save(commit=False)
+        if not user.is_staff:
+            profile, created = Profile.objects.get_or_create(user=user)
+            profile.avatar = self.cleaned_data.get('avatar', profile.avatar)
+            if commit:
+                user.save()
+                profile.save()
+        return user
+    
+    
+class AvatarUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['avatar']
+        
+        
+class ChangePasswordForm(PasswordChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ['password']
+
 class ProgressForm(forms.ModelForm):
     class Meta:
         model = Progress

@@ -6,35 +6,10 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 import secrets
 from django.contrib.auth.models import AbstractUser, Group, Permission
-
-class Account(models.Model):
-    # ROLE_CHOICES = (
-    # ('Admin', 'Admin'),
-    # ('Etudiant', 'Etudiant') 
-    # )
-    # role = models.CharField(max_length=10, choices=ROLE_CHOICES)
-    user_image=models.ImageField(null=True,blank=True)
-    user =models.OneToOneField(User,on_delete=models.CASCADE,null=True)
-
-    def __str__(self):
-        return str(self.user.username)
-    
-# Create your models here.
-# class UserEsprit(models.Model):
-#     username = models.CharField(max_length=100)
-#     email = models.EmailField()
-#     password = models.CharField(max_length=100)
-#     image = models.ImageField(upload_to='images/', null=True, blank=True)  # Champ image facultatif
-    
-#     # Choix possibles pour le rôle de l'utilisateur
-#     ROLE_CHOICES = (
-#     ('admin', 'Admin'),
-#     ('etudiant', 'Etudiant')
-# )
-#     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
-# def __str__(self):
-#         return self.username
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
@@ -44,14 +19,14 @@ class CustomUser(AbstractUser):
 
     groups = models.ManyToManyField(
         Group,
-        related_name='customuser_set',  # Unique related_name to avoid conflicts
+        related_name='custom_user_set', 
         blank=True,
         help_text='The groups this user belongs to.',
         verbose_name='groups',
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='customuser_set',  # Unique related_name to avoid conflicts
+        related_name='custom_user_permissions_set',  
         blank=True,
         help_text='Specific permissions for this user.',
         verbose_name='user permissions',
@@ -59,6 +34,25 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='static/images', default='Front1/images/user.png')
+
+    def __str__(self):
+        return self.user.email
+
+@receiver(post_save, sender=CustomUser)
+def create_or_update_profile(sender, instance, created, **kwargs):
+    if not instance.is_staff:
+        if created:
+            Profile.objects.create(user=instance)
+        else:
+            try:
+                instance.profile.save()
+            except Profile.DoesNotExist:
+                Profile.objects.create(user=instance)
+
 class OtpToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="otps")
     otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))

@@ -16,6 +16,13 @@ urlpatterns=[
     path('login', views.signin, name='login'),
     path('password-reset/', password_reset_request, name='password_reset_request'),
     path('reset-password/<uidb64>/<token>/', password_reset_confirm, name='password_reset_confirm'),
+    path('logout/', logout_view, name='logout'),
+
+    #Update profile urls
+    path('update_profile_info/', update_profile_info, name='update_profile_info'),
+    path('change_password/', change_password, name='change_password'),
+    path('update_avatar/', update_avatar, name='update_avatar'),
+
 
     # pylint: disable=invalid-name
 

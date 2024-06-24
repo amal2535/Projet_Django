@@ -1,46 +1,106 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Update Profile{% endblock %}
+
 {% block content %}
 <div class="main-panel">
   <div class="content-wrapper">
     <div class="row justify-content-center">
-      <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
+      <div class="col-md-4 text-center">
+        <div class="card shadow-lg p-3 mb-5 bg-body rounded">
           <div class="card-body">
-            <h4 class="card-title">Update Profile</h4>
-            <form method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-              
-              <!-- Avatar -->
-              <div class="d-flex justify-content-center mb-4">
-                <img id="selectedAvatar" src="{{ user.profile.avatar.url|default:'https://bootdey.com/img/Content/avatar/avatar7.png' }}" class="rounded-circle" style="width: 150px;" alt="avatar placeholder" />
-              </div>
-              <div class="d-flex justify-content-center mb-4">
-                <div data-mdb-ripple-init class="btn btn-dark btn-rounded">
-                  <label class="form-label text-white m-1" for="avatarInput">Choose your avatar</label>
-                  <input type="file" class="form-control d-none" id="avatarInput" name="avatar" accept="image/*" onchange="displaySelectedImage(event, 'selectedAvatar')" />
-                </div>
-              </div>
-
-              <!-- Form fields -->
-              <div class="form-group">
-                <label for="exampleInputUsername1">Name</label>
-                <input type="text" class="form-control" id="exampleInputUsername1" name="username" value="{{ user.username }}" placeholder="Name">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email Address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" name="email" value="{{ user.email }}" placeholder="Email">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password">
-              </div>
-              
-              <button type="submit" class="button">Update</button>
-            </form>
+            <img id="selectedAvatar" src="{{ user.profile.avatar.url|default:'/static/Front1/images/user.png' }}" class="rounded-circle" style="width: 150px;" alt="avatar placeholder" />
+            <h3 class="card-title">{{ user.username }}</h3>
+            <h6 class="text-muted">@{{ user.username }}</h6>
+            <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#avatarModal">Upload New Photo</button>
+            <p class="text-muted mt-2">Upload a new avatar. Larger image will be resized automatically. Maximum upload size is 1 MB.</p>
+            <p class="text-muted">Member Since: {{ user.date_joined|date:"d F Y" }}</p>
           </div>
         </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card shadow-lg p-3 mb-5 bg-body rounded">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="profile-tabs" role="tablist">
+              <li class="nav-item">
+                <button class="nav-link active" id="user-info-tab" data-bs-toggle="tab" data-bs-target="#user-info" type="button" role="tab" aria-controls="user-info" aria-selected="true">Edit Personal Info</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" id="change-pwd-tab" data-bs-toggle="tab" data-bs-target="#change_pwd" type="button" role="tab" aria-controls="change-pwd" aria-selected="false">Change Password</button>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <div class="tab-content" id="profile-tabs-content">
+              <div class="tab-pane fade show active" id="user-info" role="tabpanel" aria-labelledby="user-info-tab">
+                <form method="POST" action="{% url 'update_profile_info' %}" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="username" class="form-label">Username</label>
+                      <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" placeholder="Username">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label for="email" class="form-label">Email Address</label>
+                      <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" placeholder="Email">
+                    </div>
+                    <div class="col">
+                      <label for="confirmEmail" class="form-label">Confirm Email Address</label>
+                      <input type="email" class="form-control" id="confirmEmail" name="confirm_email" value="{{ user.email }}" placeholder="Confirm Email">
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-danger">Update Info</button>
+                </form>
+              </div>
+              <div class="tab-pane fade" id="change_pwd" role="tabpanel" aria-labelledby="change-pwd-tab">
+                <form method="POST" action="{% url 'change_password' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" name="old_password" placeholder="Current Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" name="new_password1" placeholder="New Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="new_password2" placeholder="Confirm Password">
+                    </div>
+                    <button type="submit" class="btn btn-danger mb-2">Change Password</button>
+                </form>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Avatar Modal -->
+<div class="modal fade" id="avatarModal" tabindex="-1" aria-labelledby="avatarModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="avatarModalLabel">Upload New Photo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'update_avatar' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="avatarInput">Avatar</label>
+            <input type="file" class="form-control" id="avatarInput" name="avatar" accept="image/*" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger">Upload Photo</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
