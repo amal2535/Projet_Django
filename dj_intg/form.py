@@ -10,17 +10,35 @@ from django.contrib.auth.forms import SetPasswordForm
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from .models import CustomUser, Profile
+from django.core.exceptions import ValidationError
+import re
 
 
 class RegisterForm(UserCreationForm):
     email=forms.CharField(widget=forms.EmailInput(attrs={"placeholder": "Enter email-address", "class": "form-control"}))
-    username=forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter email-username", "class": "form-control"}))
+    username=forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter username", "class": "form-control"}))
     password1=forms.CharField(label="Password", widget=forms.PasswordInput(attrs={"placeholder": "Enter password", "class": "form-control"}))
     password2=forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={"placeholder": "Confirm password", "class": "form-control"}))
     
     class Meta:
         model = get_user_model()
         fields = ["email", "username", "password1", "password2"]
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not re.match("^[a-zA-Z0-9]*$", username):
+            raise ValidationError("Username must contain only letters and numbers.")
+        if len(username) < 5 or len(username) > 20:
+            raise ValidationError("Username must be between 5 and 20 characters long.")
+        if get_user_model().objects.filter(username=username).exists():
+            raise ValidationError("Username already exists.")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if get_user_model().objects.filter(email=email).exists():
+            raise ValidationError("Email already exists.")
+        return email
 
 class PasswordResetRequestForm(forms.Form):
     email = forms.EmailField(label="Enter your email", max_length=254)

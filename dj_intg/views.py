@@ -118,8 +118,6 @@ def verify_email(request, username):
             if user_otp.otp_expires_at > timezone.now():
                 user.is_active = True
                 user.save()
-                messages.success(request, "Account activated successfully!")
-
                 # Generate JWT
                 payload = {
                     'user_id': user.id,
@@ -129,7 +127,6 @@ def verify_email(request, username):
                 token = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm='HS256')
 
                 login(request, user)
-                messages.success(request, f"Welcome {user.username}!")
                 return redirect("indexS")
 
             else:
