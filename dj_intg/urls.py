@@ -37,10 +37,10 @@ urlpatterns=[
     #path('register/', views.register, name='register'),
 
     path('formProgress/', views.formProgress, name='formProgress'),
-    #path('delete/<int:id>/', deletedata, name='deletedata'),
+    path('delete/<int:id>/', deletedata, name='deletedata'),
     # path('detailmatiere/', views.detailmatiere, name='detailmatiere'),
-    #path('detailmatiere/<int:progress_id>/', views.detailmatiere, name='detailmatiere'),
-    #path('updateprogress/<int:progress_id>/', views.updateprogress, name='updateprogress'),
+    path('detailmatiere/<int:progress_id>/', views.detailmatiere, name='detailmatiere'),
+    path('updateprogress/<int:progress_id>/', views.updateprogress, name='updateprogress'),
 
 
 

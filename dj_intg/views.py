@@ -1,62 +1,40 @@
 
 import datetime
-import random
-from urllib import request
 from django.shortcuts import get_object_or_404, render,redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.forms import inlineformset_factory
 import pandas as pd
-from sklearn.ensemble import GradientBoostingClassifier
 from dj_intg.form import  ProgressForm
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Profile,Progress
-
 from django.shortcuts import HttpResponseRedirect
-from django.urls import reverse
 from joblib import load
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.contrib import messages
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
- 
 from django.utils.encoding import  force_str
-from django.contrib.auth.models import User  
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 force_str(User.pk)
 import datetime as dt
-import joblib
 from .form import AvatarUpdateForm, PasswordResetForm, PasswordResetRequestForm, RegisterForm
 from .models import OtpToken
-from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
-from django.shortcuts import render, redirect
-from django.contrib import messages
 from datetime import datetime
 import jwt
 import datetime
 from django.conf import settings
-from django.utils import timezone
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
 from rest_framework.decorators import api_view
 from .form import RegisterForm
-from .models import OtpToken, CustomUser
+from .models import OtpToken
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode
-from django.shortcuts import get_object_or_404
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth.decorators import login_required
 from .form import UpdateProfileForm
@@ -362,38 +340,48 @@ matiere_names = {
     '38': "Théorie des langages(TLA)"
 }
 
+from django.shortcuts import render
+from django.http import HttpResponse
+from joblib import load
+import pandas as pd
+from datetime import datetime as dt, timedelta
+
 def examSchedule(request):
-    predh = None  # Use None as the initial value to indicate no prediction yet
+    predh = None
     prediction_made = False
+    start_date = None
+    end_date = None
     data = {
         'Matière': 0, 'Coeifficient': 0, 'Nombre_de_jours_de_revision_total': 0, 'Niveau_Etudiant': 0
     }
-
     model_ann = load('data/gradient_boosting_model.joblib')
 
     if request.method == "POST":
         niveau = request.POST.get('niveau')
-        print('NIVEAU', niveau)
         matiere = request.POST.get('matiere')
-        print('matiere', matiere)
         coefficient = request.POST.get('coefficient')
-        print('coefficient', coefficient)
         debut_revision_str = request.POST.get('debut_revision')
         date_examen_str = request.POST.get('date_examen')
 
-        # Validation et mise à jour des données d'entrée
-        data['Niveau_Etudiant'] = int(niveau)
-        data['Matière'] = int(matiere)
-        data['Coeifficient'] = int(coefficient)
+        def clean_input(value):
+            return ''.join(filter(str.isdigit, value))
 
-        # Convertissez les chaînes en objets datetime
+        niveau = clean_input(niveau)
+        matiere = clean_input(matiere)
+        coefficient = clean_input(coefficient)
+
+        if niveau:
+            data['Niveau_Etudiant'] = int(niveau)
+        if matiere:
+            data['Matière'] = int(matiere)
+        if coefficient:
+            data['Coeifficient'] = int(coefficient)
+
         if debut_revision_str and date_examen_str:
             debut_revision = dt.strptime(debut_revision_str, '%Y-%m-%d')
             date_examen = dt.strptime(date_examen_str, '%Y-%m-%d')
-            # Calculer la différence en jours
             difference_jours = (date_examen - debut_revision).days
-            print(difference_jours)
-            # Effectuer le reste du traitement
+
             if difference_jours < 5:
                 data['Nombre_de_jours_de_revision_total'] = 1
             elif 5 <= difference_jours <= 10:
@@ -401,15 +389,11 @@ def examSchedule(request):
             else:
                 data['Nombre_de_jours_de_revision_total'] = 3
 
-        # Convertir le dictionnaire en DataFrame
-        df = pd.DataFrame([data])  # Créer un DataFrame avec une seule ligne
-        print("DataFrame:", df.values)
+        df = pd.DataFrame([data])
 
-        # Effectuer la prédiction
         predh = model_ann.predict(df.values)
-        predh = int(predh[0])  # Assurez-vous de convertir en entier
+        predh = int(predh[0])
 
-        # Conversion de predh en jours et demi-journées
         jours = predh // 8
         heures_restantes = predh % 8
         if heures_restantes >= 4:
@@ -418,7 +402,6 @@ def examSchedule(request):
         else:
             demi_journee = True
 
-        # Résultat final en jours et demi-journées
         if demi_journee:
             if jours == 0:
                 predh = "demi-journée"
@@ -427,7 +410,8 @@ def examSchedule(request):
         else:
             predh = f"{jours} jours"
 
-        print("apres conversion:", predh)
+        start_date = debut_revision.date()
+        end_date = start_date + timedelta(days=jours)
 
         progress_instance = Progress(
             user=request.user,
@@ -445,8 +429,12 @@ def examSchedule(request):
 
         prediction_made = True
 
-    return render(request, 'examSchedule.html', {'predh': predh, 'prediction_made': prediction_made})
-
+    return render(request, 'examSchedule.html', {
+        'predh': predh,
+        'prediction_made': prediction_made,
+        'start_date': start_date,
+        'end_date': end_date
+    })
 
 
 @login_required

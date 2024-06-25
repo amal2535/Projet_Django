@@ -78,8 +78,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'dj_integration.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -87,10 +85,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -108,8 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -120,28 +112,17 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static/'),
-    # os.path.join(BASE_DIR, 'static2/'), 
 
 ]
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_FROM = 'farahchahrazedselmi@esprit.tn'
-# EMAIL_HOST_USER = 'farahchahrazedselmi@esprit.tn'
-# EMAIL_HOST_PASSWORD = '191JFT3528'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
+
 REGISTRATION_REQUIRED = True
 REGISTRATION_EMAIL_VERIFICATION = True
 
@@ -150,5 +131,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Replace with your SMTP server host
 EMAIL_PORT = 587  # Replace with your SMTP server port
 EMAIL_USE_TLS = True  # Enable TLS if required
-EMAIL_HOST_USER = 'maatougamal1@gmail.com'  # Replace with your SMTP username
+EMAIL_HOST_USER = 'maatougamal1@gmail.com' 
 EMAIL_HOST_PASSWORD = 'cqez tyhm cnyq udpj' 

@@ -132,18 +132,15 @@
                     </form>
                   </div>
                   <center>
-                  
                     <div>
                       {% if predj != 0 %}
-                      <!-- <p class="result">Temps idéal de révision en jours : <span style="color: #ed1c24; font-weight: bold;">{{ predj }}
-                          jours</span></p> -->
                       <br>
                       {% if prediction_made %}
-                      <p class="result">Temps idéal de révision en heures : <span style="color: #ed1c24; font-weight: bold;">{{ predh }}
-                          </span></p>
-                          {% endif %}
+                      <p class="result">Temps idéal de révision en heures : <span style="color: #ed1c24; font-weight: bold;">{{ predh }}</span></p>
+                      {% endif %}
                       {% endif %}
                     </div>
+                    <div id='calendar'></div>
                   </center>
                 </div>
               </div>
@@ -155,13 +152,28 @@
   </div>
 </div>
 
+<!-- Include FullCalendar CSS and JS -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/locales-all.min.js'></script>
 
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'en',
+        events: [
+            {% if prediction_made %}
+            {
+                title: 'Revision Period',
+                start: '{{ start_date }}', // Pass the start date from Django view
+                end: '{{ end_date }}' // Pass the end date from Django view
+            }
+            {% endif %}
+        ]
+    });
+    calendar.render();
+});
+</script>
 {% endblock %}
-
-
-
-
-
-
-
