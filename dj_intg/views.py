@@ -42,7 +42,6 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from datetime import datetime
-from rest_framework.decorators import api_view
 import jwt
 import datetime
 from django.conf import settings
@@ -60,7 +59,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth.decorators import login_required
-from .form import UpdateProfileForm, ChangePasswordForm
+from .form import UpdateProfileForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 
@@ -276,19 +275,17 @@ def update_profile_info(request):
     
     return render(request, 'profile.html', context)
 
-
 @login_required
 def update_avatar(request):
+    user_profile, created = Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
-        form = AvatarUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        form = AvatarUpdateForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
             form.save()
             return redirect('profile')
     else:
-        form = AvatarUpdateForm(instance=request.user.profile)
-    return render(request, 'update_avatar.html', {'form': form})
-
-
+        form = AvatarUpdateForm(instance=user_profile)
+    return render(request, 'profile.html', {'form': form})
 
 @login_required
 def change_password(request):
@@ -303,9 +300,7 @@ def change_password(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'profile.html', {'form': form})
-
-    
+    return render(request, 'profile.html', {'password_change_form': form})
 
 
 def calendar(request):

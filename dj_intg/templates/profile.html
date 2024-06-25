@@ -10,7 +10,7 @@
       <div class="col-md-4 text-center">
         <div class="card shadow-lg p-3 mb-5 bg-body rounded">
           <div class="card-body">
-            <img id="selectedAvatar" src="{{ user.profile.avatar.url|default:'/static/Front1/images/user.png' }}" class="rounded-circle" style="width: 150px;" alt="avatar placeholder" />
+            <img id="selectedAvatar" src="{{ user.profile.avatar.url|default:'/static/Front1/images/user.png' }}" class="rounded-circle" style="width: 150px; image-size: cover; image-position: center;" alt="avatar placeholder" />
             <h3 class="card-title">{{ user.username }}</h3>
             <h6 class="text-muted">@{{ user.username }}</h6>
             <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#avatarModal">Upload New Photo</button>
@@ -57,20 +57,20 @@
               </div>
               <div class="tab-pane fade" id="change_pwd" role="tabpanel" aria-labelledby="change-pwd-tab">
                 <form method="POST" action="{% url 'change_password' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="currentPassword">Current Password</label>
-                        <input type="password" class="form-control" id="currentPassword" name="old_password" placeholder="Current Password">
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword">New Password</label>
-                        <input type="password" class="form-control" id="newPassword" name="new_password1" placeholder="New Password">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="new_password2" placeholder="Confirm Password">
-                    </div>
-                    <button type="submit" class="btn btn-danger mb-2">Change Password</button>
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" class="form-control" id="currentPassword" name="old_password" placeholder="Current Password">
+                  </div>
+                  <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" class="form-control" id="newPassword" name="new_password1" placeholder="New Password">
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="new_password2" placeholder="Confirm Password">
+                  </div>
+                  <button type="submit" class="btn btn-danger mb-2">Change Password</button>
                 </form>
             </div>
             </div>

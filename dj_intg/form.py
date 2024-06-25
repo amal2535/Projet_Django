@@ -59,12 +59,6 @@ class AvatarUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['avatar']
         
-        
-class ChangePasswordForm(PasswordChangeForm):
-    class Meta:
-        model = CustomUser
-        fields = ['password']
-
 class ProgressForm(forms.ModelForm):
     class Meta:
         model = Progress
