@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Success</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = "{{ token }}";
+            localStorage.setItem('jwt_token', token);
+            console.log(token);
+            alert("Account activated successfully!");
+            window.location.href = '/indexS';
+        });
+    </script>
+</head>
+<body>
+    <h1>Account Activation</h1>
+    <p>Account activation is successful. Redirecting...</p>
+</body>
+</html>

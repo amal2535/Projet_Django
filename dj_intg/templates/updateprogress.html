@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content%}
+
+<style>
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+    }
+
+    .field {
+        margin-bottom: 15px;
+    }
+
+    .label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+
+
+ <!-- partial -->
+ <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-6 grid-margin stretch-card">
+          <div class="card">
+            
+          </div>
+        </div>
+        
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <!-- <h4 class="card-title">Schedule</h4> -->
+              <h3  style="color: red;">Update Progress</h3>
+              <ul>
+                <div class="progress-info">
+                    <p>Exam Date: {{ user_progress.exam_date }}</p>
+                    <p>Revision Start Date: {{ user_progress.revision_start_date }}</p>
+                    <p>Subject: {{ user_progress.matiere }}</p>
+                    <!-- <p>Level: {{ user_progress.niveau }}</p> -->
+                    <p>Revision days: {{ user_progress.jours_rev }}</p>
+                    <!-- <p>Predicted Days: {{ user_progress.days_predicted }}</p> -->
+                    <p>Predicted Hours: {{ user_progress.hours_predicted }}</p>
+                    <!-- <p>Followed Days: {{ user_progress.days_suivi }}</p> -->
+                    <p>Followed Hours: {{ user_progress.hours_suivi }}</p>
+                    <p>Progress: {{ user_progress.progressvalue }}%</p>
+                </div>
+            </ul>
+
+            <form method="post" action="">
+              {% csrf_token %}
+              <div class="row">
+                  <!-- <div class="col-md-6">
+                      <div class="form-group row align-items-start">
+                          <label class="col-sm-3 col-form-label text-center">Jours Suivi</label>
+                          <div class="col-sm-9">
+                              <input type="text" name="days_suivi" class="form-control">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group row align-items-start">
+                          <label class="col-sm-3 col-form-label text-center">Heures Suivi</label>
+                          <div class="col-sm-9">
+                              <input type="text" name="hours_suivi" class="form-control">
+                          </div>
+                      </div>
+                  </div> -->
+
+                  <!-- <div class="field">
+                    <label class="label" for="studying_days">Studying Days</label>
+                    <input class="input" type="text" name="studying_days" id="studying_days" required>
+                </div>
+                <div class="field">
+                    <label class="label" for="tot_studying_hours">Total Studying Hours</label>
+                    <input class="input" type="text" name="tot_studying_hours" id="tot_studying_hours" required>
+                </div> -->
+
+                <!-- <div class="col-md-6">
+                    <div class="form-group row align-items-start">
+                        <label class="col-sm-3 col-form-label text-center" for="studying_days">Studying Days</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="studying_days" id="studying_days" class="form-control" required>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="form-group row align-items-center">
+                        <label class="col-sm-3 col-form-label text-center font-weight-bold" for="tot_studying_hours">Total Studied Hours</label>
+                        <div class="col-sm-9">
+                            <input type="number" name="tot_studying_hours" id="tot_studying_hours" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                
+              </div>
+              {% if error_message %}
+              <p class="error">{{ error_message }}</p>
+              {% endif %}
+            
+              <div class="form-group row justify-content-end mt-5">
+                  <div class="col-sm-4 offset-sm-4"> 
+                      <button type="submit" class="button">Save</button>
+                  </div>
+              </div>
+          </form>
+         
+
+
+            
+              
+            </div>
+          </div>
+        </div>
+      
+        
+       
+      </div>
+    </div>
+
+
+
+    {% endblock %}

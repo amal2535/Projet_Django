@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Exam</h4>
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <form id="examForm" method="POST" action="" class="form-sample" onsubmit="return validateForm()">
+                      {% csrf_token %}
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Start Date of Revision</label>
+                            <div class="col-sm-9">
+                              <input type="datetime-local" name="debut_revision" class="form-control" id="debut_revision" min="{{ today|date:'Y-m-d\TH:i' }}" required>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Subject</label>
+                            <div class="col-sm-9">
+                              <select name="matiere" id="matiere" class="form-control" required>
+                                <option disabled selected hidden>Select a Subject</option>
+                                <option value="Unix">Unix</option>
+                                <option value="Algo1">Algo1</option>
+                                <option value="Algo2">Algo2</option>
+                                <option value="ADF">ADF</option>
+                                <option value="Analys_num">Analys_num</option>
+                                <option value="Arch_Micro">Arch_Micro</option>
+                                <option value="BD">BD</option>
+                                <option value="CCNA">CCNA</option>
+                                <option value="Calcul_Sc">Calcul_Sc</option>
+                                <option value="CCCA1">CCCA1</option>
+                                <option value="CCCA2">CCCA2</option>
+                                <option value="CCCA3">CCCA3</option>
+                                <option value="CCCF1">CCCF1</option>
+                                <option value="CCCF2">CCCF2</option>
+                                <option value="CCCF3">CCCF3</option>
+                                <option value="Java">Java</option>
+                                <option value="Env_entreprise">Env_entreprise</option>
+                                <option value="Fond_RX">Fond_RX</option>
+                                <option value="GL">GL</option>
+                                <option value="IPNet_routing">IPNet_routing</option>
+                                <option value="Multimedia">Multimedia</option>
+                                <option value="UML">UML</option>
+                                <option value="MB1">MB1</option>
+                                <option value="MB2">MB2</option>
+                                <option value="MB3">MB3</option>
+                                <option value="MB4">MB4</option>
+                                <option value="POO_Cplus">POO_Cplus</option>
+                                <option value="ProgProc1">ProgProc1</option>
+                                <option value="ProgProc2">ProgProc2</option>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Rx_comm">Rx_comm</option>
+                                <option value="Switched_Networks">Switched_Networks</option>
+                                <option value="IP_essentials">IP_essentials</option>
+                                <option value="SGBD">SGBD</option>
+                                <option value="SysRX">SysRX</option>
+                                <option value="Sys_Scripting">Sys_Scripting</option>
+                                <option value="Proba">Proba</option>
+                                <option value="Tech_Web">Tech_Web</option>
+                                <option value="TLA">TLA</option>
+                                <option value="Electronique">Electronique</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Coefficient</label>
+                            <div class="col-sm-9">
+                              <select name="coefficient" id="coefficient" class="form-control" required>
+                                <option disabled selected hidden>Select a Coefficient</option>
+                                <option value="Coeff1">Coeff1</option>
+                                <option value="Coeff1,5">Coeff1,5</option>
+                                <option value="Coeff2">Coeff2</option>
+                                <option value="Coeff3">Coeff3</option>
+                                <option value="Coeff4">Coeff4</option>
+                                <option value="Coeff5">Coeff5</option>
+                                <option value="Coeff7">Coeff7</option>
+                                <option value="Coeff8">Coeff8</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Test Date</label>
+                            <div class="col-sm-9">
+                              <input type="datetime-local" name="date_examen" class="form-control" id="date_examen" min="{{ today|date:'Y-m-d\TH:i' }}" required>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Level</label>
+                            <div class="col-sm-9">
+                              <select name="niveau" id="niveau" class="form-control" required>
+                                <option disabled selected hidden>Select a Level</option>
+                                <option value="Niv1">NVFaible</option>
+                                <option value="Niv2">NVFort</option>
+                                <option value="Niv3">NVM</option>
+                                <option value="Niv4">NVTF</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group row justify-content-end mt-5">
+                            <div class="col-sm-4 offset-sm-4">
+                              <button type="submit" class="button">Generate</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <center>
+                    <div>
+                      {% if predj != 0 %}
+                      <br>
+                      {% if prediction_made %}
+                      <p class="result">Ideal Revision Time : <span style="color: #ed1c24; font-weight: bold;">{{ predh }}</span></p>
+                      <button type="button" class="btn text-white bg-danger" data-toggle="modal" data-target="#exampleModal">
+                        Show Calendar
+                      </button>    
+                      {% endif %}
+                      {% endif %}
+                    </div>
+                  </center>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Study Plan</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div id='calendar'></div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include FullCalendar CSS and JS -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/locales-all.min.js'></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'en',
+        editable: true,
+        droppable: true,
+        events: (() => {
+            if ('{{predh}}' === 'demi-journée') {
+                return [
+                    {
+                        title: 'Demi Journée ({{matiere}})',
+                        start: new Date('{{start_date}}'),
+                        end: new Date('{{end_date}}'),
+                        backgroundColor: "#f4511e",
+                        allDay: true
+                    },
+                    {
+                        title: 'Examen {{matiere}}',
+                        start: new Date('{{date_exam}}'),
+                        end: new Date('{{date_exam}}'),
+                        backgroundColor: "#228B22",
+                        allDay: true
+                    }
+                ];
+            } else if ('{{demi_journee}}' === "True") {
+                return [
+                    {
+                        title: 'Révision {{matiere}}',
+                        start: new Date('{{start_date}}'),
+                        end: new Date('{{end_date}}'),
+                        backgroundColor: "#f4511e",
+                        allDay: true
+                    },
+                    {
+                        title: 'Demi Journée',
+                        start: new Date('{{end_date}}'),
+                        end: new Date('{{end_date}}'),
+                        backgroundColor: "#f4511e",
+                        allDay: true
+                    },
+                    {
+                        title: 'Examen {{matiere}}',
+                        start: new Date('{{date_exam}}'),
+                        end: new Date('{{date_exam}}'),
+                        backgroundColor: "#228B22",
+                        allDay: true
+                    }
+                ];
+            } else {
+                return [
+                    {
+                        title: 'Révision {{matiere}}',
+                        start: new Date('{{start_date}}'),
+                        end: new Date('{{end_date}}'),
+                        backgroundColor: "#f4511e",
+                        allDay: true
+                    },
+                    {
+                        title: 'Examen {{matiere}}',
+                        start: new Date('{{date_exam}}'),
+                        end: new Date('{{date_exam}}'),
+                        backgroundColor: "#228B22",
+                        allDay: true
+                    }
+                ];
+            }
+        })()
+    });
+    $('#exampleModal').on('shown.bs.modal', function () {
+        calendar.render();
+    });
+});
+
+function validateForm() {
+    var debutRevision = document.getElementById('debut_revision').value;
+    var matiere = document.getElementById('matiere').value;
+    var coefficient = document.getElementById('coefficient').value;
+    var dateExamen = document.getElementById('date_examen').value;
+    var niveau = document.getElementById('niveau').value;
+
+    if (debutRevision === '' || matiere === "Select a Subject" || coefficient === "Select a Coefficient" || dateExamen === '' || niveau === "Select a Level" || !debutRevision || !matiere || !coefficient || !dateExamen  || !niveau ) {
+        alert('Please fill in all fields.');
+        return false;
+    }
+
+    var today = new Date();
+    var selectedDebutRevision = new Date(debutRevision);
+    var selectedDateExamen = new Date(dateExamen);
+
+
+    return true;
+}
+</script>
+
+<style>
+  .modal-dialog {
+      max-width: 90%;
+      width: auto;
+  }
+  .modal-content {
+      height: 85vh;
+  }
+  .modal-body {
+      overflow-y: auto;
+  }
+  #calendar {
+      height: 100%;
+      width: 100%;
+  }
+</style>
+{% endblock %}
+

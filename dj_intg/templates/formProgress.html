@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+              <div class="card">
+                
+              </div>
+            </div>
+            
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Subject List</h4>
+                  <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        
+                        <div class="table-responsive">
+                        
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <!-- <th>Exam Date</th>
+                                <th>Revision Start Date</th> -->
+                                <th>Subject</th>
+                                <!-- <th>Niveau</th>
+                                <th>Jours Revision</th>
+                                <th>Days Predicted</th>
+                                <th>Hours Predicted</th>
+                                <th>Days Suivi</th>
+                                <th>Hours Suivi</th>
+                                <th>Progress Value</th> -->
+                                <!-- <th>Update progress</th>
+                                <th>Supprimer</th> -->
+                                <th>Action</th>
+                                <th>Days Predicted</th>
+                                <th>Progress</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for progress in DATA %}
+                                <tr>
+                                    <!-- <td>{{ progress.exam_date }}</td>
+                                    <td>{{ progress.revision_start_date }}</td> -->
+                                    <td>{{ progress.matiere }}</td>
+                                    <!-- <td>{{ progress.niveau }}</td>
+                                    <td>{{ progress.jours_rev }}</td>
+                                    <td>{{ progress.days_predicted }}</td>
+                                    <td>{{ progress.hours_predicted }}</td>
+                                    <td>{{ progress.days_suivi }}</td>
+                                    <td>{{ progress.hours_suivi }}</td>
+                                    <td>{{ progress.progressvalue }}</td> -->
+                                    <td> 
+                                        <div> 
+                                          <!-- <a href="#">
+                                            <i class="fas fa-edit" style="font-size: 20px; color:#1ba045; margin-right: 15px;"></i> 
+                                        </a>  -->
+                                        <a href="{% url 'updateprogress' progress.id %}"><i class="fas fa-edit" style="font-size: 20px; color:#1ba045; margin-right: 15px;"></i></a>
+      
+                                          <a href="{% url 'deletedata' progress.id %}">
+                                            <i class="fas fa-trash-alt" style="font-size: 20px; color:#ce220f; margin-right: 15px;"></i> 
+                                        </a> 
+      
+                                          <!-- <button class="btn btn-danger delete-progress" data-id="{{ progress.id }}">
+                                            <i class="fas fa-trash-alt"></i> Supprimer
+                                        </button> -->
+                                       
+                                        </div> 
+                                      </td> 
+                                      <td>{{ progress.days_predicted }}.{{ progress.hours_predicted }}</td>
+                                      <td>{{ progress.progressvalue }}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                          </table>
+                          
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          
+            
+
+        
+          </div>
+        </div>
+
+<style>
+  .alert {
+  padding: 20px;
+  background-color: #f44336; /* Red */
+  color: white;
+  margin-bottom: 15px;
+}
+
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.closebtn:hover {
+  color: black;
+}
+</style>
+
+
+        {% endblock %}
+       

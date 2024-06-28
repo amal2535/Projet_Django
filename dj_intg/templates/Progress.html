@@ -1,0 +1,218 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content%}
+<div class="col-md-12 d-flex flex-column justify-content-start align-items-end">
+  <div class="form-group row">
+    <label for="matiere" class="col-sm-3 col-form-label font-weight-bold text-right">Matiere</label>
+    <div class="col-sm-9">
+      <select name="matiere" id="matiere" class="form-control" required>
+        <option disabled selected hidden>Sélectionner une matiere</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+<div class="main-panel">
+  <div class="content-wrapper">
+
+
+    <!-- Bloc 1 -->
+    <div class="row">
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="row">
+            <div class="col-md-6">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin du bloc 1 -->
+
+    <!-- Bloc 2 -->
+    <div class="row">
+      <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Line chart</h4>
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Doughnut chart</h4>
+            <canvas id="doughnutChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+      <!--
+      <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Bar chart</h4>
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+      -->
+    <!-- Fin du bloc 2 -->
+
+    <!-- Ajoutez ici d'autres blocs si nécessaire -->
+    
+    <!--
+    <div class="row">
+      <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Area chart</h4>
+            <canvas id="areaChart"></canvas>
+          </div>
+        </div>
+      </div>
+    -->
+      <!--
+    <div class="row">
+      <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Pie chart</h4>
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Scatter chart</h4>
+            <canvas id="scatterChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      -->
+
+
+  
+     
+    
+     
+     
+      
+      
+    </div>
+  </div>
+  <script src="{% static 'Front2/vendors/js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="{% static 'Front2/vendors/chart.js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{% static 'Front2/js/chart.js' %}"></script>
+
+<script>
+  // Function to decode HTML entities
+  function decodeHtmlEntities(html) {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const djangoResponse = {summary: '{{ progress_summary }}'};
+    const decodedSummary = decodeHtmlEntities(djangoResponse.summary);
+    const summaryData = JSON.parse(decodedSummary);
+    console.log(summaryData)
+    // Initialize select options from summaryData
+    const selectElement = document.getElementById('matiere');
+    summaryData.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item.pk; // Use primary key as value
+      option.textContent = item.fields.matiere;
+      selectElement.appendChild(option);
+    });
+
+    // Dummy initial chart data (replace with actual initial data)
+    const initialData = getChartData(summaryData[0].fields.pk); // Use first item initially
+
+    // Initialize chart with initial data
+    const ctx = document.getElementById('lineChart').getContext('2d');
+    const lineChart = new Chart(ctx, {
+      type: 'line',
+      data: initialData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          }
+        },
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Month'
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Value'
+            }
+          }
+        }
+      }
+    });
+
+    // Function to fetch chart data based on selected matiere (pk)
+    function getChartData(pk, context) {
+      // Example function to fetch data (replace with your actual data fetch logic)
+      const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+      const data = {
+        labels: labels,
+        datasets: [{
+          label: `Dataset for PK ${pk}`,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          data: [12, 19, 3, 5, 2, 3], // Example data points, replace with actual data fetch
+          fill: true,
+        }]
+      };
+      return data;
+    }
+
+    // Event listener for select change
+    selectElement.addEventListener('change', function() {
+      const selectedPK = this.value;
+      const context = this.textContent 
+      const newData = getChartData(selectedPK, context);
+      updateChartData(newData);
+    });
+
+    // Function to update chart data
+    function updateChartData(newData) {
+      lineChart.data.datasets = newData.datasets;
+      lineChart.update();
+    }
+  });
+</script>
+
+{% endblock %}
