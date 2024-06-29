@@ -32,108 +32,97 @@
     }
 </style>
 
-
- <!-- partial -->
- <div class="main-panel">
+<div class="main-panel">
     <div class="content-wrapper">
-      <div class="row">
-        <div class="col-lg-6 grid-margin stretch-card">
-          <div class="card">
-            
-          </div>
-        </div>
-        
-        <div class="col-lg-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <!-- <h4 class="card-title">Schedule</h4> -->
-              <h3  style="color: red;">Update Progress</h3>
-              <ul>
-                <div class="progress-info">
-                    <p class="font-weight-bold text-success">Exam Date: {{ user_progress.exam_date }}</p>
-                    <p class="font-weight-bold">Revision Start Date: {{ user_progress.revision_start_date }}</p>
-                    <p class="font-weight-bold">Subject: {{ user_progress.matiere }}</p>
-                    <!-- <p>Level: {{ user_progress.niveau }}</p> -->
-                    <p class="font-weight-bold">Revision days: {{ user_progress.jours_rev }}</p>
-                    <!-- <p>Predicted Days: {{ user_progress.days_predicted }}</p> -->
-                    <p class="font-weight-bold">Predicted Hours: {{ user_progress.hours_predicted }}</p>
-                    <!-- <p>Followed Days: {{ user_progress.days_suivi }}</p> -->
-                    <p class="font-weight-bold">Followed Hours: {{ user_progress.hours_suivi }}</p>
-                    <p class="font-weight-bold">Progress: {{ user_progress.progressvalue }}%</p>
-                </div>
-            </ul>
-
-            <form method="post" action="">
-              {% csrf_token %}
-              <div class="row">
-                  <!-- <div class="col-md-6">
-                      <div class="form-group row align-items-start">
-                          <label class="col-sm-3 col-form-label text-center">Jours Suivi</label>
-                          <div class="col-sm-9">
-                              <input type="text" name="days_suivi" class="form-control">
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="form-group row align-items-start">
-                          <label class="col-sm-3 col-form-label text-center">Heures Suivi</label>
-                          <div class="col-sm-9">
-                              <input type="text" name="hours_suivi" class="form-control">
-                          </div>
-                      </div>
-                  </div> -->
-
-                  <!-- <div class="field">
-                    <label class="label" for="studying_days">Studying Days</label>
-                    <input class="input" type="text" name="studying_days" id="studying_days" required>
-                </div>
-                <div class="field">
-                    <label class="label" for="tot_studying_hours">Total Studying Hours</label>
-                    <input class="input" type="text" name="tot_studying_hours" id="tot_studying_hours" required>
-                </div> -->
-
-                <!-- <div class="col-md-6">
-                    <div class="form-group row align-items-start">
-                        <label class="col-sm-3 col-form-label text-center" for="studying_days">Studying Days</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="studying_days" id="studying_days" class="form-control" required>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="col-md-6">
-                    <div class="form-group row align-items-center">
-                        <label class="col-sm-3 col-form-label text-center font-weight-bold" for="tot_studying_hours">Total Studied Hours</label>
-                        <div class="col-sm-9">
-                            <input type="number" name="tot_studying_hours" id="tot_studying_hours" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-                
-              </div>
-              {% if error_message %}
-              <p class="error">{{ error_message }}</p>
-              {% endif %}
-            
-              <div class="form-group row justify-content-end mt-5">
-                  <div class="col-sm-4 offset-sm-4"> 
-                      <button type="submit" class="button">Save</button>
-                  </div>
-              </div>
-          </form>
-         
-
-
-            
-              
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card"></div>
             </div>
-          </div>
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 style="color: red;">Update Progress</h3>
+                        <ul class="d-flex d-flex flex-column flex-lg-row justify-content-between">
+                            <div class="progress-info">
+                                <p class="font-weight-bold text-success">Exam Date: {{ user_progress.exam_date }}</p>
+                                <p class="font-weight-bold">Revision Start Date: {{ user_progress.revision_start_date }}</p>
+                                <p class="font-weight-bold">Subject: {{ user_progress.matiere }}</p>
+                                <p class="font-weight-bold">Revision days: {{ user_progress.jours_rev }}</p>
+                                <p class="font-weight-bold">Predicted Hours: {{ user_progress.hours_predicted }}</p>
+                                <p class="font-weight-bold">Followed Hours: {{ user_progress.hours_suivi }}</p>
+                                <p class="font-weight-bold">Progress: {{ user_progress.progressvalue }}%</p>
+                            </div>
+                            {% if user_progress.progressvalue  %}
+                            <div class="col-lg-6 grid-margin stretch-card">
+                                <canvas id="doughnutChart"></canvas>
+                            </div>
+                            {% endif %}
+                        </ul>
+
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-sm-3 col-form-label text-center font-weight-bold" for="tot_studying_hours">Total Studied Hours</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" name="tot_studying_hours" id="tot_studying_hours" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if error_message %}
+                            <p class="error">{{ error_message }}</p>
+                            {% endif %}
+                            <div class="form-group row justify-content-end mt-5">
+                                <div class="col-sm-4 offset-sm-4">
+                                    <button type="submit" class="button">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-      
-        
-       
-      </div>
     </div>
 
+    <script src="{% static 'Front2/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'Front2/vendors/chart.js/Chart.min.js' %}"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+  
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="{% static 'Front2/js/chart.js' %}"></script>
+  
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressValue = {{ user_progress.progressvalue }};
+            const restValue = 100 - progressValue;
 
+            const ctx = document.getElementById('doughnutChart').getContext('2d');
 
-    {% endblock %}
+            const progressChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Progress', 'Rest'],
+                    datasets: [{
+                        data: [progressValue, restValue],
+                        backgroundColor: ['#36A2EB', '#FF6384'], 
+                        hoverBackgroundColor: ['#36A2EB', '#FF6384']
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false, 
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
