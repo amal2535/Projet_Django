@@ -47,10 +47,6 @@ def dashbord(request, *args, **kwargs):
     # """ reb=nders the dashboard page"""
     return render(request,'index.html')
 
-def indexS(request):
-    """Renders the indexS page."""
-    return render(request, 'indexS.html')
-
 def profile(request):
     """Renders the profile page."""
     return render(request, 'profile.html')
@@ -354,6 +350,39 @@ from django.utils.dateparse import parse_datetime
 from datetime import datetime as dt, timedelta
 import pandas as pd
 from joblib import load
+
+def dashboard(request):
+    # Exemple de données, remplacez avec votre logique réelle
+    subjects = [
+        {'name': 'Programming 1', 'progress': 25, 'days_left': 2,'color': '#800080'},
+        {'name': 'Math', 'progress': 50, 'days_left': 4,'color': '#FFC0CB'},
+        {'name': 'History', 'progress': 75, 'days_left': 1,'color': '#22CE83'},
+    ]
+    exams_taken = ['French', 'Mathematics','Algo1','algo2','math']
+    exams_in_progress = [
+        {'name': 'Electronics', 'days_left': 4, 'progress': 60, 'color': '#98AFC7'},
+        {'name': 'English', 'days_left': 5, 'progress': 40, 'color': '#2B3856'},
+    ]
+    exams_passed_count = 5
+    exams_remaining_count = 3
+
+    context = {
+        'user': request.user,
+        'subjects': subjects,
+        'exams_taken': exams_taken,
+        'exams_in_progress': exams_in_progress,
+        'exams_passed_count': exams_passed_count,
+        'exams_remaining_count': exams_remaining_count,
+    }
+
+    return render(request, 'indexS.html', {
+        'user': request.user,
+        'subjects': subjects,
+        'exams_taken': exams_taken,
+        'exams_in_progress': exams_in_progress,
+        'exams_passed_count': exams_passed_count,
+        'exams_remaining_count': exams_remaining_count,
+    })
 
 def examSchedule(request):
     predh = None

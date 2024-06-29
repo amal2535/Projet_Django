@@ -50,16 +50,16 @@
               <h3  style="color: red;">Update Progress</h3>
               <ul>
                 <div class="progress-info">
-                    <p>Exam Date: {{ user_progress.exam_date }}</p>
-                    <p>Revision Start Date: {{ user_progress.revision_start_date }}</p>
-                    <p>Subject: {{ user_progress.matiere }}</p>
+                    <p class="font-weight-bold text-success">Exam Date: {{ user_progress.exam_date }}</p>
+                    <p class="font-weight-bold">Revision Start Date: {{ user_progress.revision_start_date }}</p>
+                    <p class="font-weight-bold">Subject: {{ user_progress.matiere }}</p>
                     <!-- <p>Level: {{ user_progress.niveau }}</p> -->
-                    <p>Revision days: {{ user_progress.jours_rev }}</p>
+                    <p class="font-weight-bold">Revision days: {{ user_progress.jours_rev }}</p>
                     <!-- <p>Predicted Days: {{ user_progress.days_predicted }}</p> -->
-                    <p>Predicted Hours: {{ user_progress.hours_predicted }}</p>
+                    <p class="font-weight-bold">Predicted Hours: {{ user_progress.hours_predicted }}</p>
                     <!-- <p>Followed Days: {{ user_progress.days_suivi }}</p> -->
-                    <p>Followed Hours: {{ user_progress.hours_suivi }}</p>
-                    <p>Progress: {{ user_progress.progressvalue }}%</p>
+                    <p class="font-weight-bold">Followed Hours: {{ user_progress.hours_suivi }}</p>
+                    <p class="font-weight-bold">Progress: {{ user_progress.progressvalue }}%</p>
                 </div>
             </ul>
 
