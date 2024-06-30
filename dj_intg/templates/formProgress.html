@@ -83,7 +83,15 @@
                                        
                                         </div> 
                                       </td> 
-                                      <td>{{ progress.days_predicted }}.{{ progress.hours_predicted }}</td>
+                                      {% if progress.days_predicted == 0 %}
+                                        <td>{{ progress.hours_predicted }} hours</td>
+                                      {% endif %}
+                                      {% if progress.days_predicted == 1 %}
+                                        <td>{{ progress.days_predicted }} day, {{ progress.hours_predicted }} hours</td>
+                                      {% endif %}
+                                      {% if progress.days_predicted > 1 %}
+                                        <td>{{ progress.days_predicted }} days, {{ progress.hours_predicted }} hours</td>
+                                      {% endif %}
                                       <td>{{ progress.progressvalue }}%</td>
                                 </tr>
                                 {% endfor %}

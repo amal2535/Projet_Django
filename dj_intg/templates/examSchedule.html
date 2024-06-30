@@ -264,7 +264,9 @@ function validateForm() {
     var today = new Date();
     var selectedDebutRevision = new Date(debutRevision);
     var selectedDateExamen = new Date(dateExamen);
-
+    if(selectedDateExamen < selectedDebutRevision){
+      alert("Exam Date Should be after start revision date.")
+    }
 
     return true;
 }
