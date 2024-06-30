@@ -39,9 +39,7 @@ def navbar_data(request):
 
             response.append((progress.matiere, risk_level))
 
-    # Sort response by risk level
     response.sort(key=lambda x: risk_levels[x[1]])
 
-    # Format response for JSON
     response_formatted = [f"{matiere} is in {risk_level} risk" for matiere, risk_level in response]
     return {'navbar_data': response_formatted}
