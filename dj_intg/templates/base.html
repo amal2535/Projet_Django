@@ -40,31 +40,23 @@
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span class="icon-menu"></span>
                 </button>
-                
+
                 <ul class="navbar-nav navbar-nav-right">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-bell"></i>
-                            <span class="badge badge-danger">{{ notifications|length }}</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-notifications" aria-labelledby="notificationDropdown">
-                            <h6 class="dropdown-header">Notifications</h6>
-                            {% for notification in notifications %}
-                            <a class="dropdown-item d-flex align-items-center">
-                                <div class="mr-3">
-                                    <div class="icon-circle bg-primary">
-                                        <i class="fas fa-file-alt text-white"></i>
+                            <span class="badge badge-danger p-1">{{ navbar_data|length }}</span>
+                        </a>      
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notifDropdown" style="max-height: 200px; overflow: auto; width: 200px; max-width: auto;">
+                            {% for notification in navbar_data %}
+                                <div>
+                                    <div class="px-2 font-weight-500" style="{% if 'extreme' in notification %}color: red;{% elif 'high' in notification %}color: orange;{% elif 'medium' in notification %}color: green;{% else %}color: black;{% endif %}">
+                                        {{ notification }}
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="small text-gray-500">{{ notification.date }}</div>
-                                    <span class="font-weight-bold">{{ notification.message }}</span>
-                                </div>
-                            </a>
-                            {% empty %}
-                            <a class="dropdown-item text-center small text-gray-500" href="#">No new notifications</a>
                             {% endfor %}
                         </div>
+                        
                     </li>
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
@@ -152,7 +144,13 @@
     <script src="{% static 'Front2/js/settings.js' %}"></script>
     <script src="{% static 'Front2/js/todolist.js' %}"></script>
     <script src="{% static 'Front2/js/chart.js' %}"></script>
-  
+    <script>
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('{{navbar_data}}')
+        });
+    </script>  
 
 </body>
 
