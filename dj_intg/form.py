@@ -81,7 +81,7 @@ class ProgressForm(forms.ModelForm):
     class Meta:
         model = Progress
         # fields = ['matiere', 'revision_start_date', 'exam_date', 'hours_predicted', 'days_predicted', 'hours_suivi', 'days_suivi']
-        fields = ['user', 'exam_date', 'revision_start_date', 'matiere', 'niveau', 'jours_rev', 'days_predicted', 'hours_predicted', 'days_suivi', 'hours_suivi', 'progressvalue']
+        fields = ['user', 'exam_date', 'revision_start_date', 'matiere', 'niveau', 'days_predicted', 'hours_predicted', 'days_suivi', 'hours_suivi', 'progressvalue']
         
     def __init__(self, *args, **kwargs):
         super(ModelForm, self).__init__(*args, **kwargs)

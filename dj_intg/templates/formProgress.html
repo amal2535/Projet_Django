@@ -49,6 +49,8 @@
                                 <!-- <th>Update progress</th>
                                 <th>Supprimer</th> -->
                                 <th>Action</th>
+                                <th>Days Predicted</th>
+                                <th>Progress</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -71,9 +73,9 @@
                                         </a>  -->
                                         <a href="{% url 'updateprogress' progress.id %}"><i class="fas fa-edit" style="font-size: 20px; color:#1ba045; margin-right: 15px;"></i></a>
       
-                                        <a href="{% url 'deletedata' progress.id %}">
-                                          <i class="fas fa-trash-alt" style="font-size: 20px; color:#ce220f; margin-right: 15px;"></i> 
-                                      </a> 
+                                          <a href="{% url 'deletedata' progress.id %}">
+                                            <i class="fas fa-trash-alt" style="font-size: 20px; color:#ce220f; margin-right: 15px;"></i> 
+                                        </a> 
       
                                           <!-- <button class="btn btn-danger delete-progress" data-id="{{ progress.id }}">
                                             <i class="fas fa-trash-alt"></i> Supprimer
@@ -81,6 +83,16 @@
                                        
                                         </div> 
                                       </td> 
+                                      {% if progress.days_predicted == 0 %}
+                                        <td>{{ progress.hours_predicted }} hours</td>
+                                      {% endif %}
+                                      {% if progress.days_predicted == 1 %}
+                                        <td>{{ progress.days_predicted }} day</td>
+                                      {% endif %}
+                                      {% if progress.days_predicted > 1 %}
+                                        <td>{{ progress.days_predicted }} days</td>
+                                      {% endif %}
+                                      <td>{{ progress.progressvalue }}%</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

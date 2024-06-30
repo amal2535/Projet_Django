@@ -13,24 +13,22 @@
               <div class="col-12 grid-margin">
                 <div class="card">
                   <div class="card-body">
-                    <form method="POST" action="" class="form-sample">
+                    <form id="examForm" method="POST" action="" class="form-sample" onsubmit="return validateForm()">
                       {% csrf_token %}
-                      
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Start Date of Revision</label>
                             <div class="col-sm-9">
-                              <input type="date" name="debut_revision" class="form-control" id="datematiere">
+                              <input type="datetime-local" name="debut_revision" class="form-control" id="debut_revision" min="{{ today|date:'Y-m-d\TH:i' }}" required>
                             </div>
                           </div>
                         </div>
-                        
                         <div class="col-md-6">
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Subject</label>
                             <div class="col-sm-9">
-                              <select name="matiere" id="matiere" class="form-control">
+                              <select name="matiere" id="matiere" class="form-control" required>
                                 <option disabled selected hidden>Select a Subject</option>
                                 <option value="Unix">Unix</option>
                                 <option value="Algo1">Algo1</option>
@@ -77,43 +75,40 @@
                           </div>
                         </div>
                       </div>
-                      
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Coefficient</label>
                             <div class="col-sm-9">
-                                <select name="coefficient" id="coefficient" class="form-control">
-                                  <option disabled selected hidden>Select a Coefficient</option>
-                                  <option value="Coeff1">Coeff1</option>
-                                  <option value="Coeff1,5">Coeff1,5</option>
-                                  <option value="Coeff2">Coeff2</option>
-                                  <option value="Coeff3">Coeff3</option>
-                                  <option value="Coeff4">Coeff4</option>
-                                  <option value="Coeff5">Coeff5</option>
-                                  <option value="Coeff7">Coeff7</option>
-                                  <option value="Coeff8">Coeff8</option>
-                                </select>
+                              <select name="coefficient" id="coefficient" class="form-control" required>
+                                <option disabled selected hidden>Select a Coefficient</option>
+                                <option value="Coeff1">Coeff1</option>
+                                <option value="Coeff1,5">Coeff1,5</option>
+                                <option value="Coeff2">Coeff2</option>
+                                <option value="Coeff3">Coeff3</option>
+                                <option value="Coeff4">Coeff4</option>
+                                <option value="Coeff5">Coeff5</option>
+                                <option value="Coeff7">Coeff7</option>
+                                <option value="Coeff8">Coeff8</option>
+                              </select>
                             </div>
                           </div>
                         </div>
-                        
                         <div class="col-md-6">
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Test Date</label>
                             <div class="col-sm-9">
-                              <input type="date" name="date_examen" class="form-control" id="datematiere">
+                              <input type="datetime-local" name="date_examen" class="form-control" id="date_examen" min="{{ today|date:'Y-m-d\TH:i' }}" required>
                             </div>
                           </div>
                         </div>
                       </div>
-                      
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Level</label>
                             <div class="col-sm-9">
-                              <select name="niveau" id="niveau" class="form-control">
+                              <select name="niveau" id="niveau" class="form-control" required>
                                 <option disabled selected hidden>Select a Level</option>
                                 <option value="Niv1">NVFaible</option>
                                 <option value="Niv2">NVFort</option>
@@ -124,7 +119,7 @@
                           </div>
                           <div class="form-group row justify-content-end mt-5">
                             <div class="col-sm-4 offset-sm-4">
-                              <button type="submit" class="button" onclick="redirectToCalendar()">Generate</button>
+                              <button type="submit" class="button">Generate</button>
                             </div>
                           </div>
                         </div>
@@ -136,12 +131,34 @@
                       {% if predj != 0 %}
                       <br>
                       {% if prediction_made %}
-                      <p class="result">Temps idéal de révision en heures : <span style="color: #ed1c24; font-weight: bold;">{{ predh }}</span></p>
+                      <p class="result">Ideal Revision Time : <span style="color: #ed1c24; font-weight: bold;">{{ predh }}</span></p>
+                      <button type="button" class="btn text-white bg-danger" data-toggle="modal" data-target="#exampleModal">
+                        Show Calendar
+                      </button>    
                       {% endif %}
                       {% endif %}
                     </div>
-                    <div id='calendar'></div>
                   </center>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Study Plan</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div id='calendar'></div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -163,17 +180,112 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         locale: 'en',
-        events: [
-            {% if prediction_made %}
-            {
-                title: 'Revision Period',
-                start: '{{ start_date }}', // Pass the start date from Django view
-                end: '{{ end_date }}' // Pass the end date from Django view
+        editable: true,
+        droppable: true,
+        events: (() => {
+            if ('{{predh}}' === 'demi-journée') {
+                return [
+                    {
+                        title: 'Demi Journée ({{matiere}})',
+                        start: new Date('{{start_date}}'),
+                        end: new Date('{{end_date}}'),
+                        backgroundColor: "#f4511e",
+                        allDay: true
+                    },
+                    {
+                        title: 'Examen {{matiere}}',
+                        start: new Date('{{date_exam}}'),
+                        end: new Date('{{date_exam}}'),
+                        backgroundColor: "#228B22",
+                        allDay: true
+                    }
+                ];
+            } else if ('{{demi_journee}}' === "True") {
+                return [
+                    {
+                        title: 'Révision {{matiere}}',
+                        start: new Date('{{start_date}}'),
+                        end: new Date('{{end_date}}'),
+                        backgroundColor: "#f4511e",
+                        allDay: true
+                    },
+                    {
+                        title: 'Demi Journée',
+                        start: new Date('{{end_date}}'),
+                        end: new Date('{{end_date}}'),
+                        backgroundColor: "#f4511e",
+                        allDay: true
+                    },
+                    {
+                        title: 'Examen {{matiere}}',
+                        start: new Date('{{date_exam}}'),
+                        end: new Date('{{date_exam}}'),
+                        backgroundColor: "#228B22",
+                        allDay: true
+                    }
+                ];
+            } else {
+                return [
+                    {
+                        title: 'Révision {{matiere}}',
+                        start: new Date('{{start_date}}'),
+                        end: new Date('{{end_date}}'),
+                        backgroundColor: "#f4511e",
+                        allDay: true
+                    },
+                    {
+                        title: 'Examen {{matiere}}',
+                        start: new Date('{{date_exam}}'),
+                        end: new Date('{{date_exam}}'),
+                        backgroundColor: "#228B22",
+                        allDay: true
+                    }
+                ];
             }
-            {% endif %}
-        ]
+        })()
     });
-    calendar.render();
+    $('#exampleModal').on('shown.bs.modal', function () {
+        calendar.render();
+    });
 });
+
+function validateForm() {
+    var debutRevision = document.getElementById('debut_revision').value;
+    var matiere = document.getElementById('matiere').value;
+    var coefficient = document.getElementById('coefficient').value;
+    var dateExamen = document.getElementById('date_examen').value;
+    var niveau = document.getElementById('niveau').value;
+
+    if (debutRevision === '' || matiere === "Select a Subject" || coefficient === "Select a Coefficient" || dateExamen === '' || niveau === "Select a Level" || !debutRevision || !matiere || !coefficient || !dateExamen  || !niveau ) {
+        alert('Please fill in all fields.');
+        return false;
+    }
+
+    var today = new Date();
+    var selectedDebutRevision = new Date(debutRevision);
+    var selectedDateExamen = new Date(dateExamen);
+    if(selectedDateExamen < selectedDebutRevision){
+      alert("Exam Date Should be after start revision date.")
+      return false;
+    }
+    return true;
+}
 </script>
+
+<style>
+  .modal-dialog {
+      max-width: 90%;
+      width: auto;
+  }
+  .modal-content {
+      height: 85vh;
+  }
+  .modal-body {
+      overflow-y: auto;
+  }
+  #calendar {
+      height: 100%;
+      width: 100%;
+  }
+</style>
 {% endblock %}

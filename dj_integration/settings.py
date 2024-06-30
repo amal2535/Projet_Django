@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'dj_intg',
     'rest_framework',
     'rest_framework.authtoken',
+
     
 ]
 
@@ -47,6 +48,7 @@ JWT_SECRET_KEY = '123@&!:a)d^='
 
 
 MIDDLEWARE = [
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    ##'dj_intg.middleware.LoginRequiredMiddleware',
 
 ]
 
@@ -70,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'dj_intg.context_precessors.navbar_data',
+
             ],
         },
     },

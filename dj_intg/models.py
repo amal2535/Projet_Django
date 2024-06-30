@@ -64,6 +64,7 @@ class OtpToken(models.Model):
         return self.user.username
 
     
+
 class Progress(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -71,13 +72,11 @@ class Progress(models.Model):
     revision_start_date = models.DateField()
     matiere = models.CharField(max_length=100)
     niveau = models.CharField(max_length=100)
-    jours_rev = models.IntegerField()
-    days_predicted = models.IntegerField()  # prédiction du modèle
-    hours_predicted = models.IntegerField()  # prédiction du modèle
+    days_predicted = models.IntegerField()
+    hours_predicted = models.IntegerField()  
     days_suivi = models.IntegerField()
     hours_suivi = models.IntegerField()
     progressvalue = models.FloatField(default=0) 
     def __str__(self):
         return f"{self.user.username} - {self.matiere} - Exam Date: {self.exam_date}"
-    
-
+   

@@ -40,12 +40,62 @@ from django.contrib.auth.decorators import login_required
 from .form import UpdateProfileForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from datetime import date
+from django.utils.dateparse import parse_datetime
+from datetime import datetime as dt, timedelta
+import pandas as pd
+from joblib import load
 
 
-# Create your views here.
-def dashbord(request, *args, **kwargs):
-    # """ reb=nders the dashboard page"""
-    return render(request,'index.html')
+def get_color(progress_value):
+    if progress_value < 25:
+        return '#FF3737'  # Red
+    elif progress_value < 50:
+        return '#77DD77'  # green
+    elif progress_value < 75:
+        return '#800080'  # Purple
+    else:
+        return '#FFBF00'  # yellow
+
+@login_required
+def dashboard1(request):
+    progresses = Progress.objects.filter(user=request.user)
+    today = date.today()
+
+    exams_taken = [progress.matiere for progress in progresses if progress.exam_date < today]
+    exams_in_progress = [
+        {
+            'name': progress.matiere,
+            'days_left': (progress.exam_date - today).days,
+        }
+        for progress in progresses if progress.exam_date >= today
+    ]
+
+    exams_passed_count = len(exams_taken)
+    exams_remaining_count = len(exams_in_progress)
+
+    subjects = [
+        {'name': progress.matiere, 'progress': progress.progressvalue, 'color': get_color(progress.progressvalue)}
+        for progress in progresses if progress.exam_date >= today
+    ]
+
+    context = {
+        'user': request.user,
+        'subjects': subjects,
+        'exams_taken': exams_taken,
+        'exams_in_progress': exams_in_progress,
+        'exams_passed_count': exams_passed_count,
+        'exams_remaining_count': exams_remaining_count,
+    }
+
+    return render(request, 'indexS.html', context)
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+def dashboard(request, *args, **kwargs):
+
+    return render(request, 'index.html')
 
 def indexS(request):
     """Renders the indexS page."""
@@ -54,24 +104,6 @@ def indexS(request):
 def profile(request):
     """Renders the profile page."""
     return render(request, 'profile.html')
-
-def studyPlan(request):
-    """Renders the studyPlan page."""
-    return render(request, 'studyPlan.html')
-def progress(request):
-    """Renders the progress page."""
-
-    user_progresses = Progress.objects.filter(user=request.user)
-    
-    # Create a dictionary with username and progress value
-    progress_summary = {progress.user.username: progress.progressvalue for progress in user_progresses}
-    
-    # Pass the summary to the template context
-    context = {
-        'progress_summary': progress_summary
-    }
-    return render(request, 'progress.html')
-
 
 
 @api_view(['POST', 'GET'])
@@ -116,6 +148,7 @@ def verify_email(request, username):
 
     return render(request, "verify_token.html", {})
 
+@login_required
 def resend_otp(request):
     if request.method == 'POST':
         user_email = request.POST.get("otp_email")
@@ -164,9 +197,10 @@ def signin(request):
             return redirect("indexS")
         else:
             messages.warning(request, "Invalid credentials")
-            return redirect("login")
+            return render(request, 'login.html')
 
     return render(request, 'login.html')
+
 
 # Logout function
 @api_view(['POST', 'GET'])
@@ -175,7 +209,7 @@ def logout_view(request):
     messages.info(request, "You have been logged out successfully.")
     return redirect("login")
 
-
+@login_required
 def password_reset_request(request):
     if request.method == 'POST':
         form = PasswordResetRequestForm(request.POST)
@@ -206,6 +240,7 @@ def password_reset_request(request):
         form = PasswordResetRequestForm()
     return render(request, 'password_reset_request.html', {'form': form})
 
+@login_required
 def password_reset_confirm(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -278,25 +313,6 @@ def change_password(request):
     return render(request, 'profile.html', {'password_change_form': form})
 
 
-def calendar(request):
-
-    context = {
-    }
-    return render(request, 'calendar.html', context)
-
-from django.http import JsonResponse
-
-def get_chart_data(request):
-    data = {
-        'labels': ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
-        'data': [5, 10, 15, 20, 25]
-    }
-    return JsonResponse(data)
-
-def linechart(request):
-    return render(request,"linechart.html")
-
-
 # Define the matiere_names dictionary with all options
 matiere_names = {
     '0': "Administration & sécurité des SE (Unix)",
@@ -340,46 +356,40 @@ matiere_names = {
     '38': "Théorie des langages(TLA)"
 }
 
-from django.shortcuts import render
-from django.http import HttpResponse
-from joblib import load
-import pandas as pd
-from datetime import datetime as dt, timedelta
-
+@login_required
 def examSchedule(request):
     predh = None
     prediction_made = False
     start_date = None
     end_date = None
     data = {
-        'Matière': 0, 'Coeifficient': 0, 'Nombre_de_jours_de_revision_total': 0, 'Niveau_Etudiant': 0
+        'Matière': 0, 'Coefficient': 0, 'Nombre_de_jours_de_revision_total': 0, 'Niveau_Etudiant': 0
     }
     model_ann = load('data/gradient_boosting_model.joblib')
 
     if request.method == "POST":
         niveau = request.POST.get('niveau')
         matiere = request.POST.get('matiere')
+        matiereOut = matiere
         coefficient = request.POST.get('coefficient')
         debut_revision_str = request.POST.get('debut_revision')
         date_examen_str = request.POST.get('date_examen')
-
         def clean_input(value):
             return ''.join(filter(str.isdigit, value))
 
         niveau = clean_input(niveau)
         matiere = clean_input(matiere)
         coefficient = clean_input(coefficient)
-
         if niveau:
             data['Niveau_Etudiant'] = int(niveau)
         if matiere:
             data['Matière'] = int(matiere)
         if coefficient:
-            data['Coeifficient'] = int(coefficient)
+            data['Coefficient'] = int(coefficient)
 
         if debut_revision_str and date_examen_str:
-            debut_revision = dt.strptime(debut_revision_str, '%Y-%m-%d')
-            date_examen = dt.strptime(date_examen_str, '%Y-%m-%d')
+            debut_revision = parse_datetime(debut_revision_str)
+            date_examen = parse_datetime(date_examen_str)
             difference_jours = (date_examen - debut_revision).days
 
             if difference_jours < 5:
@@ -417,35 +427,40 @@ def examSchedule(request):
             user=request.user,
             exam_date=date_examen,
             revision_start_date=debut_revision,
-            matiere=matiere,
+            matiere=matiereOut,
             niveau=niveau,
             days_predicted=jours,
             hours_predicted=heures_restantes,
             days_suivi=0,
             hours_suivi=0,
-            jours_rev=difference_jours
+            #jours_rev=difference_jours
         )
         progress_instance.save()
 
         prediction_made = True
+        return render(request, 'examSchedule.html', {
+            'predh': predh,
+            'prediction_made': prediction_made,
+            'start_date': start_date,
+            'end_date': end_date,
+            'date_exam': date_examen_str,
+            'matiere': matiereOut,
+            'demi_journee': demi_journee 
+        })
+    
+    return render(request, 'examSchedule.html')
 
-    return render(request, 'examSchedule.html', {
-        'predh': predh,
-        'prediction_made': prediction_made,
-        'start_date': start_date,
-        'end_date': end_date
-    })
 
 
 @login_required
 def formProgress(request):
-   # Filtrer les objets Progress par l'utilisateur connecté
     user_progress = Progress.objects.filter(user=request.user)
     
-    # Passer les données filtrées au modèle
     context = {"DATA": user_progress}
     
     return render(request, 'formProgress.html', context)
+
+
 
 def deletedata(request, id):
     try:
@@ -455,9 +470,6 @@ def deletedata(request, id):
     except Progress.DoesNotExist:
         messages.error(request, "La matière à supprimer n'existe pas.")
     return redirect('formProgress')
-
-   
-
 
 
 def detailmatiere(request, progress_id):
@@ -502,7 +514,7 @@ def detailmatiere(request, progress_id):
     return render(request, 'detailmatiere.html', context)
 
 
-
+@login_required
 def updateprogress(request, progress_id):
     user_progress = get_object_or_404(Progress, pk=progress_id)
     error_message = None
@@ -510,19 +522,18 @@ def updateprogress(request, progress_id):
     if request.method == 'POST':
         try:
             tot_studying_hours = int(request.POST.get('tot_studying_hours'))
-            
             # Calculate new values
             new_hours_suivi = user_progress.hours_suivi + tot_studying_hours
-            
+            predicted_time = user_progress.days_predicted * 8 + user_progress.hours_predicted
+            print(predicted_time)
             # Validate input
-            if new_hours_suivi > user_progress.hours_predicted:
+            if new_hours_suivi > predicted_time:
                 error_message = "Error: Studying hours exceed predicted hours."
             else:
                 # Update user_progress
                 user_progress.hours_suivi = new_hours_suivi
-                user_progress.progressvalue += (tot_studying_hours) / (user_progress.hours_predicted)
-                user_progress.progressvalue = round(user_progress.progressvalue * 100)  # Convert to percentage and round
-                user_progress.progressvalue = min(max(user_progress.progressvalue, 0), 100)  # Clamp between 0 and 100
+                user_progress.progressvalue = (user_progress.hours_suivi) / (predicted_time)
+                user_progress.progressvalue = round(user_progress.progressvalue * 100)
                 user_progress.save()
                 return render(request, 'updateprogress.html', {'user_progress': user_progress})
         except ValueError:

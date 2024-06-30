@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="{% static 'Front2/css/styleboutonProfile.css' %}">
     <link rel="stylesheet" href="{% static 'Front2/css/vertical-layout-light/style.css' %}">
     <link rel="shortcut icon" href="{% static 'Front2/images/flacon2.png' %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
 
 </head>
 
@@ -24,7 +27,7 @@
 
     <div class="container-scroller d-flex flex-column min-vh-100">
         <!-- partial:partials/_navbar.html -->
-        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row shadow shadow-dark">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <div class="navbar-brand brand-logo mr-5" style="margin-left: 30px;">
                     <img src="{% static 'Front1/images/logo2.png' %}" class="mr-2" alt="logo"/>
@@ -37,7 +40,24 @@
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span class="icon-menu"></span>
                 </button>
+
                 <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge badge-danger p-1">{{ navbar_data|length }}</span>
+                        </a>      
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notifDropdown" style="max-height: 200px; overflow: auto; width: 200px; max-width: auto;">
+                            {% for notification in navbar_data %}
+                                <div>
+                                    <div class="px-2 font-weight-500" style="{% if 'extreme' in notification %}color: red;{% elif 'high' in notification %}color: orange;{% elif 'medium' in notification %}color: green;{% else %}color: black;{% endif %}">
+                                        {{ notification }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                    </li>
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
                           <img src="{{ user.profile.avatar.url| default:'/static/Front1/images/user.png' }}" alt="profile"/>
@@ -62,36 +82,35 @@
         <!-- partial -->
         <div class="container-fluid page-body-wrapper flex-grow-1 d-flex">
             <!-- partial:partials/_sidebar.html -->
-            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <nav class="sidebar sidebar-offcanvas" id="sidebar"  style="background: #040720">
                 <ul class="nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'indexS' %}">
-                            <i class="icon-grid menu-icon"></i>
-                            <span class="menu-title">Dashboard</span>
+                            <i class="icon-grid menu-icon text-light"></i>
+                            <span class="menu-title text-light ">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                            <i class="icon-layout menu-icon"></i>
-                            <span class="menu-title">Exam Schedule</span>
+                            <i class="icon-layout menu-icon text-light"></i>
+                            <span class="menu-title text-light">Exam Schedule</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <div class="collapse" id="ui-basic">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="{% url 'examSchedule' %}">Exam Schedule</a></li>
+                                <li class="nav-item text-light"> <a class="nav-link" href="{% url 'examSchedule' %}">Exam Schedule</a></li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-                            <i class="icon-bar-graph menu-icon"></i>
-                            <span class="menu-title">Progress</span>
+                            <i class="icon-bar-graph menu-icon text-light"></i>
+                            <span class="menu-title text-light">Progress</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <div class="collapse" id="charts">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="{% url 'progress' %}">Progress Chart</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="{% url 'formProgress' %}">FormProgress</a></li>
+                            <ul class="nav flex-column sub-menu text-light">
+                                <li class="nav-item text-light"> <a class="nav-link" href="{% url 'formProgress' %}">FormProgress</a></li>
 
                             </ul>
                         </div>
@@ -99,7 +118,7 @@
                  
                 </ul>
             </nav>
-            <div class="main-panel flex-grow-1 d-flex flex-column">
+            <div class="main-panel flex-grow-1 d-flex flex-column" >
                 <div class="content-wrapper flex-grow-1">
                     {% block content %}
                     {% endblock %}
@@ -124,6 +143,13 @@
     <script src="{% static 'Front2/js/settings.js' %}"></script>
     <script src="{% static 'Front2/js/todolist.js' %}"></script>
     <script src="{% static 'Front2/js/chart.js' %}"></script>
+    <script>
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('{{navbar_data}}')
+        });
+    </script>  
 
 </body>
 

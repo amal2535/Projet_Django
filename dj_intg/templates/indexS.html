@@ -1,79 +1,128 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content%}
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="row">
+{% block content %}
+<style>
+    .welcome-title {
+        font-size: 2.5rem; 
+        font-weight: bold;
+        color: #000000;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+        animation: fadeInDown 1s ease-in-out; 
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="main-panel">
+    <div class="bg-body content-wrapper" style="transform: translateY(-30px);">
+        <div class="row">
             <div class="col-md-12 grid-margin">
-              <div class="row">
-                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                  <h3 class="font-weight-bold">Welcome {{ user.username }} </h3>
-                  <h6 class="font-weight-normal mb-0"><span class="text-primary"></span></h6>
+                <div class="row">
+                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                        <h3 class="welcome-title animate__animated animate__fadeInDown">Welcome {{ user.username }}</h3>
+                        <h6 class="font-weight-normal mb-0"><span class="text-primary"></span></h6>
+                    </div>
                 </div>
-                
-              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
-              <div class="card tale-bg">
-                <div class="card-people mt-auto">
-                  <!-- <img src="images/dashboard/people.svg" alt="people"> -->
-                  <img src="{% static 'Front2/images/dashboard/people.svg' %}" alt="people">
-                  <div class="weather-info">
-                    <div class="d-flex">
-                     
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 grid-margin transparent">
-              <div class="row">
-                <div class="col-md-6 mb-4 stretch-card transparent">
-                  <div class="card card-tale">
-                    <div class="card-body">
-                      <p class="mb-4"></p>
-                      <p class="fs-30 mb-2">2 days</p>
-                      <p>remain for Programming1 assignment</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-4 stretch-card transparent">
-                  <div class="card card-dark-blue">
-                    <div class="card-body">
-                      <p class="mb-4">Exams Taken</p>
-                      <p>French</p>
-                      <p>Mathematics</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
-                  <div class="card card-light-blue">
-                    <div class="card-body">
-                      <p class="mb-4">Exams in Progress</p>
-                      
-                      <p>Electronics (4 days)</p>
-                  <p>English (5 days)</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 stretch-card transparent">
-                  <div class="card card-light-danger">
-                    <div class="card-body">
-                      <p class="mb-4">Small Details Make A Big Impression</p>
-                      <p class="mb-4">Success is the sum of small efforts</p>
-                      <!-- <p class="fs-30 mb-2"> </p> -->
-                      
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> 
         </div>
-        
-        {% endblock %}
+        <div class="row">
+            <div class="col-md-7 grid-margin transparent">
+                <div class="row">
+                    <div class="col-md-12 mb-4 stretch-card transparent">
+                        <div class="card-body">
+                            <h4 class="font-weight-bold">Subject Progress</h4>
+                            {% for subject in subjects %}
+                            <div class="mb-4">
+                                <p class="mb-2 font-weight-bold">{{ subject.name }}</p>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ subject.progress }}%; background-color: {{ subject.color }};" aria-valuenow="{{ subject.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-4 stretch-card transparent">
+                        <div class="card-body">
+                            <h4 class="font-weight-bold mb-4">Exams Taken</h4>
+                            <div class="row">
+                                {% for exam in exams_taken %}
+                                <div class="col-md-4 mb-3">
+                                    <div class="card shadow-sm border-light">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-check-circle text-success fa-2x mb-2"></i>
+                                            <h5 class="font-weight-bold">{{ exam }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-4 mb-lg-0 stretch-card transparent">
+                        <div class="card-body">
+                            <h4 class="font-weight-bold">Exams in Progress</h4>
+                            <div class="row">
+                            {% for exam in exams_in_progress %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card shadow-sm border-light">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-hourglass text-warning fa-2x mb-2"></i>
+                                        <h5 class="font-weight-bold">{{ exam.name }}: ({{exam.days_left}} days left)</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 grid-margin">
+                <div class="card-body">
+                    <h4 class="card-title font-weight-bold">Exams Overview</h4>
+                    <canvas id="examsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('examsChart').getContext('2d');
+        var examsChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Passed', 'Remaining'],
+                datasets: [{
+                    label: 'Exams Overview',
+                    data: [{{ exams_passed_count }}, {{ exams_remaining_count }}],
+                    backgroundColor: ['#9b59b6', '#FBD5AB'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    });
+</script>
+
+{% endblock %}
