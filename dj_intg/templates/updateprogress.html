@@ -69,12 +69,15 @@
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <div class="info-card">
-                                        <p class="font-weight-bold">Revision days: {{ user_progress.jours_rev }}</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <div class="info-card">
-                                        <p class="font-weight-bold">Predicted Hours: {{ user_progress.hours_predicted }}</p>
+                                        {% if user_progress.days_predicted == 0 %}
+                                            <p class="font-weight-bold">Revision Prediction: {{ user_progress.hours_predicted }} hours</p>
+                                        {% endif %}
+                                        {% if user_progress.days_predicted == 1 %}
+                                            <p class="font-weight-bold">Revision Prediction: {{ user_progress.days_predicted }} day, {{ user_progress.hours_predicted }} hours</p>
+                                        {% endif %}
+                                        {% if user_progress.days_predicted > 1 %}
+                                            <p class="font-weight-bold">Revision Prediction: {{ user_progress.days_predicted }} days, {{ user_progress.hours_predicted }} hours</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-4">
@@ -89,30 +92,35 @@
                                 </div>
                             </div>
 
-                            {% if user_progress.progressvalue is not None %}
-                            <div class="col-lg-9 grid-margin stretch-card" style="transform: translateX(15rem);">
-                                <canvas id="doughnutChart"></canvas>
-                            </div>
-                            {% endif %}
                         </div>
-
-                        <form method="post" action="">
-                            {% csrf_token %}
-                            <div class="form-group row align-items-center">
-                                <label class="col-sm-3 col-form-label" for="tot_studying_hours" style="font-size: 1.2rem; font-weight: bold;text-align: center;">Total Studied Hours :</label>
-                                <div class="col-sm-9">
-                                    <input type="number" name="tot_studying_hours" id="tot_studying_hours" class="form-control" required>
+                        <div class="d-flex justify-content-between align-content-center flex-lg-row-reverse flex-column">
+                            {% if user_progress.progressvalue is not None %}
+                                <div class="col-md-4 grid-margin ">
+                                    <div class="card-body">
+                                        <h4 class="card-title font-weight-bold ">Progress Overview</h4>
+                                        <canvas id="doughnutChart"></canvas>
+                                    </div>
                                 </div>
-                            </div>
-                            {% if error_message %}
-                            <p class="error">{{ error_message }}</p>
-                            {% endif %}
-                            <div class="form-group row justify-content-end mt-5">
-                                <div class="col-sm-4 ">
-                                    <button type="submit" class="button" >Save</button>
+                            
+                                {% endif %}
+                            <form method="post" action="" class="translate-y-lg">
+                                {% csrf_token %}
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="col-sm-6 col-form-label" for="tot_studying_hours" style="font-size: 1rem; font-weight: bold;text-align: center;">Total Studied Hours :</label>
+                                    <div class="col-sm-12">
+                                        <input type="number" name="tot_studying_hours" id="tot_studying_hours" class="form-control" required>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                                {% if error_message %}
+                                <p class="error">{{ error_message }}</p>
+                                {% endif %}
+                                <div class="form-group row justify-content-end mt-5 align-self-end">
+                                    <div class="col-sm-4 ">
+                                        <button type="submit" class="button" >Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,8 +129,12 @@
 </div>
 
 <script src="{% static 'Front2/vendors/js/vendor.bundle.base.js' %}"></script>
-<script src="{% static 'Front2/vendors/chart.js/Chart.min.js' %}"></script>
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
+
+
     document.addEventListener('DOMContentLoaded', function() {
         const progressValue = {{ user_progress.progressvalue }};
         const restValue = 100 - progressValue;
@@ -162,15 +174,22 @@
 
         // Example of updating the chart data on form submission
         const form = document.querySelector('form');
+/*
         form.addEventListener('submit', function(event) {
-            event.preventDefault();
             const totStudyingHours = document.getElementById('tot_studying_hours').value;
             // Assuming AJAX call to update progress value on server
             // Here, replace this with your actual update logic
-            const updatedProgressValue = 50; // Example new progress value
             const updatedRestValue = 100 - totStudyingHours;
             createOrUpdateChart(totStudyingHours, updatedRestValue);
         });
+*/
     });
 </script>
+<style>
+    @media (min-width: 992px) { /* lg screens start at 992px */
+        .translate-y-lg {
+          transform: translateY(80px); /* Adjust the value as needed */
+        }
+      }
+</style>
 {% endblock %}

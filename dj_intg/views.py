@@ -552,19 +552,18 @@ def updateprogress(request, progress_id):
     if request.method == 'POST':
         try:
             tot_studying_hours = int(request.POST.get('tot_studying_hours'))
-            
             # Calculate new values
             new_hours_suivi = user_progress.hours_suivi + tot_studying_hours
-            
+            predicted_time = user_progress.days_predicted * 8 + user_progress.hours_predicted
+            print(predicted_time)
             # Validate input
-            if new_hours_suivi > user_progress.hours_predicted:
+            if new_hours_suivi > predicted_time:
                 error_message = "Error: Studying hours exceed predicted hours."
             else:
                 # Update user_progress
                 user_progress.hours_suivi = new_hours_suivi
-                user_progress.progressvalue += (tot_studying_hours) / (user_progress.hours_predicted)
-                user_progress.progressvalue = round(user_progress.progressvalue * 100)  # Convert to percentage and round
-                user_progress.progressvalue = min(max(user_progress.progressvalue, 0), 100)  # Clamp between 0 and 100
+                user_progress.progressvalue = (user_progress.hours_suivi) / (predicted_time)
+                user_progress.progressvalue = round(user_progress.progressvalue * 100)
                 user_progress.save()
                 return render(request, 'updateprogress.html', {'user_progress': user_progress})
         except ValueError:
