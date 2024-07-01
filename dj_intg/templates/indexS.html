@@ -3,8 +3,6 @@
 
 {% block content %}
 
-
-
 <div class="main-panel ">
     <div class="bg-body content-wrapper" style="transform: translateY(-30px);">
         <div class="row">
@@ -14,7 +12,6 @@
                         <h3 class="welcome-title animate__animated animate__fadeInDown">Welcome {{ user.username }}</h3>
                         <h6 class="font-weight-normal mb-0"><span class="text-primary"></span></h6>
                     </div>
-                </div>
             </div>
         </div>
         <div class="row">
@@ -82,7 +79,6 @@
 
 <!-- Include Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         console.log({
@@ -126,5 +122,13 @@
           transform: translateY(0);
       }
   }
+  .custom-font-large {
+    font-size: 1.25rem; /* 32px */
+}
+
+.custom-font-medium {
+    font-size: 1rem; /* 24px */
+}
+
 </style>
 {% endblock %}

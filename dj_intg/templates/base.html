@@ -17,6 +17,9 @@
     <link rel="shortcut icon" href="{% static 'Front2/images/flacon2.png' %}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet">
 
 
 </head>
@@ -24,7 +27,19 @@
 <body>
 
  
-
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="background-color: #B03878">
+                <button type="button" class="close mt-1 mr-1 ml-auto" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+                <div class="modal-body text-white font-weight-bolder d-flex flex-column justify-content-center align-items-center">
+                    <p id="modal-quote" class="text-center fs-2 custom-font-large"></p>
+                    <p id="modal-author" class="font-Gochi fs-3 custom-font-medium" style="font-family: Gochi, cursive"></p>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container-scroller d-flex flex-column min-vh-100">
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row shadow shadow-dark">
@@ -50,9 +65,16 @@
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notifDropdown" style="max-height: 200px; overflow: auto; width: 200px; max-width: auto;">
                             {% for notification in navbar_data %}
                                 <div>
-                                    <div class="px-2 font-weight-500" style="{% if 'extreme' in notification %}color: red;{% elif 'high' in notification %}color: orange;{% elif 'medium' in notification %}color: green;{% else %}color: black;{% endif %}">
-                                        {{ notification }}
-                                    </div>
+                                    <button 
+                                        data-toggle="modal" 
+                                        data-target="#exampleModal" 
+                                        class="border-0 px-2 font-weight-500" 
+                                        style="{% if 'extreme' in notification.risk_level %}color: red;{% elif 'high' in notification.risk_level %}color: orange;{% elif 'medium' in notification.risk_level %}color: yellow;{% else %}color: black;{% endif %}; background-color: white"
+                                        data-quote="{{ notification.quote.quote }}" 
+                                        data-author="{{ notification.quote.author }}"
+                                    >
+                                        {{ notification.matiere }} is in {{ notification.risk_level }} risk
+                                    </button>
                                 </div>
                             {% endfor %}
                         </div>
@@ -148,7 +170,16 @@
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('{{navbar_data}}')
+            $('#exampleModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var quote = button.data('quote'); // Extract info from data-* attributes
+                var author = button.data('author');
+                
+                // Update the modal's content
+                var modal = $(this);
+                modal.find('#modal-quote').text('"' + quote + '"');
+                modal.find('#modal-author').text('– ' + author + ' –');
+            });
         });
     </script>  
 

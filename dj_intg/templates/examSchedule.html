@@ -268,13 +268,6 @@ function validateForm() {
       alert("Exam Date Should be after start revision date.")
       return false;
     }
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set time to midnight for an accurate comparison
-
-    if (selectedDateExamen < today || selectedDebutRevision < today) {
-      alert("Dates should be after today.");
-      return false;
-    }
     return true;
 }
 </script>
