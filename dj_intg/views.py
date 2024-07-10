@@ -45,6 +45,7 @@ from django.utils.dateparse import parse_datetime
 from datetime import datetime as dt, timedelta
 import pandas as pd
 from joblib import load
+import json
 
 
 def get_color(progress_value):
@@ -95,9 +96,13 @@ def dashboard1(request):
 def dashboard(request, *args, **kwargs):
     return render(request, 'index.html')
 
+@login_required
+
 def indexS(request):
     """Renders the indexS page."""
     return render(request, 'indexS.html')
+
+@login_required
 
 def profile(request):
     """Renders the profile page."""
@@ -353,16 +358,78 @@ matiere_names = {
 }
 
 
+
 @login_required
 def calendar_view(request):
+    progress_list = Progress.objects.filter(user=request.user)
+    events = []
+
+    # Define colors for each matiere
+    matiere_colors = {
+        'Unix': '#C8A2C8',
+        'Algo1': '#7D0552',
+        'Algo2': '#3357FF',
+        'ADF': '#FF8C00',
+        'Analys_num': '#191970',
+        'Arch_Micro': '#FF5733',
+        'BD': '#33FF57',
+        'CCNA': '#3357FF',
+        'Calcul_Sc': '#FF33A5',
+        'CCCA1': '#33FFF3',
+        'CCCA2': '#FF5733',
+        'CCCA3': '#33FF57',
+        'CCCF1': '#3357FF',
+        'CCCF2': '#FF33A5',
+        'CCCF3': '#33FFF3',
+        'Java': '#F5E216',
+        'Env_entreprise': '#33FF57',
+        'Fond_RX': '#3357FF',
+        'GL': '#FF33A5',
+        'IPNet_routing': '#33FFF3',
+        'Multimedia': '#FF5733',
+        'UML': '#33FF57',
+        'MB1': '#3357FF',
+        'MB2': '#FF33A5',
+        'MB3': '#007C80',
+        'MB4': '#FF5733',
+        'POO_Cplus': '#33FF57',
+        'ProgProc1': '#3357FF',
+        'ProgProc2': '#FF33A5',
+        'Mobile': '#33FFF3',
+        'Rx_comm': '#FF5733',
+        'Switched_Networks': '#33FF57',
+        'IP_essentials': '#3357FF',
+        'SGBD': '#E3F9A6',
+        'SysRX': '#33FFF3',
+        'Sys_Scripting': '#FF5733',
+        'Proba': '#33FF57',
+        'Tech_Web': '#3357FF',
+        'TLA': '#FF33A5',
+        'Electronique': '#A0D6B4',
+    }
+
+    for progress in progress_list:
+        start_date = progress.revision_start_date
+        end_date = progress.revision_start_date + timedelta(days=progress.days_predicted)
+        matiere_color = matiere_colors.get(progress.matiere, '#f4511e')
+
+        events.append({
+            'title': f'Révision {progress.matiere}',
+            'start': start_date.isoformat(),
+            'end': end_date.isoformat(),
+            'backgroundColor': matiere_color,
+            'allDay': True,
+        })
+        events.append({
+            'title': f'Examen {progress.matiere}',
+            'start': progress.exam_date.isoformat(),
+            'end': progress.exam_date.isoformat(),
+            'backgroundColor': matiere_color,
+            'allDay': True,
+        })
+
     context = {
-        'prediction_made': request.GET.get('prediction_made', 'False') == 'True',
-        'predh': request.GET.get('predh', ''),
-        'matiere': request.GET.get('matiere', ''),
-        'start_date': request.GET.get('start_date', ''),
-        'end_date': request.GET.get('end_date', ''),
-        'date_exam': request.GET.get('date_exam', ''),
-        'demi_journee': request.GET.get('demi_journee', 'False') == 'True',
+        'events': json.dumps(events),
     }
     return render(request, 'calendar.html', context)
 
@@ -459,6 +526,8 @@ def examSchedule(request):
         })
     
     return render(request, 'examSchedule.html')
+
+
 @login_required
 def formProgress(request):
     user_progress = Progress.objects.filter(user=request.user)

@@ -26,21 +26,31 @@
 
 </head>
 <style>
+    
     .notification-item {
-        padding: 8px;
+        margin-bottom: 0.5rem;
+        border-radius: 0.25rem;
+        transition: background-color 0.3s ease;
     }
+    
+    .notification-item:hover {
+        background-color: #e9ecef;
+    }
+    
+    .notification-item .btn {
+        width: 100%;
+        text-align: left;
+    }
+
+    
     
 </style>    
 
 <body>
 
- 
     <div class="modal fade" id="quoteModal" tabindex="-1" role="dialog" aria-labelledby="quoteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-          <div class="modal-content" style="background-color: #FBD5AB">
-            <button type="button" class="close mt-1 mr-1 ml-auto" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true" class="text-dark">&times;</span>
-            </button>
+          <div class="modal-content" style="background-color:#Fffff">
             <div class="modal-body text-dark font-weight-bolder d-flex flex-column justify-content-center align-items-center">
               <p id="modal-quote" class="text-center fs-2 custom-font-large"></p>
               <p id="modal-author" class="font-Gochi fs-3 custom-font-medium" style="font-family: Gochi, cursive"></p>
@@ -70,35 +80,33 @@
                         <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-bell fa-lg"></i>
                             <span class="badge badge-danger p-1">{{ navbar_data|length }}</span>
-                
                         </a>      
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notifDropdown" style="max-height: 400px; overflow-y: auto; width: 300px;">
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notifDropdown" style="max-height: 400px; overflow-y: auto; width: 400px;">
                             <div class="dropdown-header">
                                 <strong class="heading" style="font-size:1rem;">Notifications</strong>
                             </div>
-                            {% for notification in navbar_data %}
-                         
-                            <div class="dropdown-item notification-item ">
-                                <button 
-                                    type="button"
-                                    class="btn border-0 py-2 px-3 d-flex align-items-center justify-content-between"
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#quoteModal"
-                                    style=" {% if 'extreme' in notification.risk_level %}color: red;{% elif 'high' in notification.risk_level %}color: orange;{% elif 'medium' in notification.risk_level %}color: yellow;{% else %}color: black;{% endif %};"
-                                    data-quote="{{ notification.quote.quote }}" 
-                                    data-author="{{ notification.quote.author }}"
-                                >
-                                <div>
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <span style="font-size:1rem;">{{ notification.matiere }} is in {{ notification.risk_level }} risk</span>                                    
+                            <div class="list-group">
+                                {% for notification in navbar_data %}
+                                <div class="list-group-item list-group-item-action d-flex align-items-center justify-content-between notification-item" style="background-color: {% if 'extreme' in notification.risk_level %}#ffcccc{% elif 'high' in notification.risk_level %}#ffe6cc{% elif 'medium' in notification.risk_level %}#ffffcc{% else %}#f8f9fa{% endif %}; border-left: 5px solid {% if 'extreme' in notification.risk_level %}#ff0000{% elif 'high' in notification.risk_level %}#ff8000{% elif 'medium' in notification.risk_level %}#ffff00{% else %}#000000{% endif %};">
+                                    <button 
+                                        type="button"
+                                        class="btn border-0 py-2 px-3 d-flex align-items-center justify-content-between w-100"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#quoteModal"
+                                        data-quote="{{ notification.quote.quote }}" 
+                                        data-author="{{ notification.quote.author }}"
+                                    >
+                                        <div>
+                                            <i class="fas fa-exclamation-triangle "></i>
+                                            <span style="font-size:1rem;">{{ notification.matiere }} is in {{ notification.risk_level }} risk</span>                                    
+                                        </div>
+                                    </button>
                                 </div>
-
-                                  
-                                </button>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
                         </div>  
                     </li>
+                    
 
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
@@ -197,14 +205,19 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             $('#quoteModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget); // Button that triggered the modal
-                var quote = button.data('quote'); // Extract info from data-* attributes
+                var button = $(event.relatedTarget); 
+                var quote = button.data('quote'); 
                 var author = button.data('author');
                 
                 // Update the modal's content
                 var modal = $(this);
                 modal.find('#modal-quote').text('"' + quote + '"');
                 modal.find('#modal-author').text('– ' + author + ' –');
+            });
+            $('#quoteModal').on('shown.bs.modal', function () {
+                setTimeout(function() {
+                    $('#quoteModal').modal('hide');
+                }, 8000); // Close after 8 seconds
             });
         });
     </script>  

@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #login middleware
     'dj_intg.middleware.LoginRequiredMiddleware',
 
 ]
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'dj_intg.context_precessors.navbar_data',
+
 
             ],
         },
@@ -116,6 +118,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/login'
 
 
 STATIC_URL = 'static/'

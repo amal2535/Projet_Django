@@ -32,67 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         locale: 'en',
         editable: true,
         droppable: true,
-        events: (() => {
-            if ('{{predh}}' === 'demi-journée') {
-                return [
-                    {
-                        title: 'Demi Journée ({{matiere}})',
-                        start: new Date('{{start_date}}'),
-                        end: new Date('{{end_date}}'),
-                        backgroundColor: "#f4511e",
-                        allDay: true
-                    },
-                    {
-                        title: 'Examen {{matiere}}',
-                        start: new Date('{{date_exam}}'),
-                        end: new Date('{{date_exam}}'),
-                        backgroundColor: "#228B22",
-                        allDay: true
-                    }
-                ];
-            } else if ('{{demi_journee}}' === "True") {
-                return [
-                    {
-                        title: 'Révision {{matiere}}',
-                        start: new Date('{{start_date}}'),
-                        end: new Date('{{end_date}}'),
-                        backgroundColor: "#f4511e",
-                        allDay: true
-                    },
-                    {
-                        title: 'Demi Journée',
-                        start: new Date('{{end_date}}'),
-                        end: new Date('{{end_date}}'),
-                        backgroundColor: "#f4511e",
-                        allDay: true
-                    },
-                    {
-                        title: 'Examen {{matiere}}',
-                        start: new Date('{{date_exam}}'),
-                        end: new Date('{{date_exam}}'),
-                        backgroundColor: "#228B22",
-                        allDay: true
-                    }
-                ];
-            } else {
-                return [
-                    {
-                        title: 'Révision {{matiere}}',
-                        start: new Date('{{start_date}}'),
-                        end: new Date('{{end_date}}'),
-                        backgroundColor: "#f4511e",
-                        allDay: true
-                    },
-                    {
-                        title: 'Examen {{matiere}}',
-                        start: new Date('{{date_exam}}'),
-                        end: new Date('{{date_exam}}'),
-                        backgroundColor: "#228B22",
-                        allDay: true
-                    }
-                ];
-            }
-        })()
+        events: {{ events|safe }}
     });
     calendar.render();
 });

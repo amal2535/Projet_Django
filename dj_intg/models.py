@@ -79,4 +79,3 @@ class Progress(models.Model):
     progressvalue = models.FloatField(default=0) 
     def __str__(self):
         return f"{self.user.username} - {self.matiere} - Exam Date: {self.exam_date}"
-   

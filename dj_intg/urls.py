@@ -10,10 +10,10 @@ urlpatterns=[
     path('indexS/', views.dashboard1, name='indexS'),
     path('profile/', views.profile, name='profile'),
     
-    path("register", views.register, name="register"),
+    path("register/", views.register, name="register"),
     path("verify-email/<slug:username>", views.verify_email, name="verify-email"),
     path("resend-otp", views.resend_otp, name="resend-otp"),
-    path('login', views.signin, name='login'),
+    path('login/', views.signin, name='login'),
     path('password-reset/', password_reset_request, name='password_reset_request'),
     path('reset-password/<uidb64>/<token>/', password_reset_confirm, name='password_reset_confirm'),
     path('logout/', logout_view, name='logout'),
