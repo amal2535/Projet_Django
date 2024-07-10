@@ -13,7 +13,7 @@
             <img id="selectedAvatar" src="{{ user.profile.avatar.url|default:'/static/Front1/images/user.png' }}" class="rounded-circle" style="width: 150px; image-size: cover; image-position: center;" alt="avatar placeholder" />
             <h3 class="card-title">{{ user.username }}</h3>
             <h6 class="text-muted">@{{ user.username }}</h6>
-            <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#avatarModal">Upload New Photo</button>
+            <button class="button" class="btn btn-danger mt-2" data-bs-toggle="modal" data-bs-target="#avatarModal">New Photo</button>
             <p class="text-muted mt-2">Upload a new avatar. Larger image will be resized automatically. Maximum upload size is 1 MB.</p>
             <p class="text-muted">Member Since: {{ user.date_joined|date:"d F Y" }}</p>
           </div>
@@ -52,7 +52,7 @@
                       <input type="email" class="form-control" id="confirmEmail" name="confirm_email" value="{{ user.email }}" placeholder="Confirm Email">
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-danger">Update Info</button>
+                  <button type="submit" class="button">Update Info</button>
                 </form>
               </div>
               <div class="tab-pane fade" id="change_pwd" role="tabpanel" aria-labelledby="change-pwd-tab">
@@ -70,7 +70,7 @@
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" class="form-control" id="confirmPassword" name="new_password2" placeholder="Confirm Password">
                   </div>
-                  <button type="submit" class="btn btn-danger mb-2">Change Password</button>
+                  <button type="submit" class="button">Change Pwd</button>
                 </form>
             </div>
             </div>
@@ -97,8 +97,8 @@
             <input type="file" class="form-control" id="avatarInput" name="avatar" accept="image/*" onchange="displaySelectedImage(event, 'selectedAvatar')" />
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-danger">Upload Photo</button>
+            <button type="button" class="button" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="button">Upload Photo</button>
           </div>
         </form>
       </div>

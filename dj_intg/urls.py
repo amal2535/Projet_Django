@@ -24,6 +24,9 @@ urlpatterns=[
     path('update_avatar/', update_avatar, name='update_avatar'),
     
     path('examSchedule/', views.examSchedule, name='examSchedule'),
+    #Calendar
+    path('calendar/', views.calendar_view, name='calendar_view'),
+
     path('formProgress/', views.formProgress, name='formProgress'),
     path('delete/<int:id>/', deletedata, name='deletedata'),
     path('detailmatiere/', views.detailmatiere, name='detailmatiere'),

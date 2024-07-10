@@ -22,14 +22,13 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static 'Front2/images/flacon2.png' %}" />
 <style>
-    form{
-        width: 500px;
-        height: auto;
-        padding: 20px 20px 20px 20px;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        margin: 50px auto;
-        border-radius: 10px;
-    }
+  form{
+    width: 600px;
+    height: 350px;
+    padding: 20px 20px 20px 20px;
+    margin: 50px auto;
+    border-radius: 10px;
+}
     form p{
         text-align: center;
     }
@@ -40,38 +39,40 @@
 </style>
 
 <div class="container-scroller">
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
-      <div class="content-wrapper d-flex align-items-center auth px-0 bg-image " style="background-image: url('/static/Front2/images/bg.png'); background-repeat: no-repeat;background-size: cover; background-position: center;">
-        <div class="row w-100 mx-0">
-          <div class="col-lg-4 mx-auto">
-            <div class="auth-form-light text-left py-5 px-4 px-sm-5  rounded shadow-lg ">
-              <div class="brand-logo">
-                <img src="{% static 'Front1/images/logo2.png' %}" alt="logo">
-              </div>
+  <div class="container-fluid page-body-wrapper full-page-wrapper">
+    <div class="content-wrapper d-flex align-items-center auth px-0 bg-image " style="background-image: url('/static/Front2/images/bg.png'); background-repeat: no-repeat;background-size: cover; background-position: center;">
+      <div class="row w-100 mx-0">
+        <div class="col-lg-4 mx-auto">
+          
+<div class="form-container bg-light  rounded shadow-lg ">
 <div class="form-container">
     <form action="" method='POST'>
-        {% csrf_token %}
+      {% csrf_token %}
+      <div class="brand-logo">
+        <img src="{% static 'Front1/images/logo2.png' %}" alt="logo">
+      </div>
+        
         <h3><strong>Resend OTP</strong></h3>
         <div class="mb-3">
             <label class="form-label">Email Address</label>
             <input type="email" class="form-control" name="otp_email" placeholder="Enter email-address">
           </div>
-          <div style="text-align: center;">
+          <div  style="text-align: center; ">
             <button type="submit" class="button">Send OTP</button>
         </div>
-
+ <!-- Pop-up Messages -->
+ {% if messages %}
+ <div class="container mt-3">
+     {% for message1 in messages %}
+     <div class="alert alert-{{ message1.tags }} alert-dismissible fade show" role="alert">
+         {{ message1 }}
+     </div>
+     {% endfor %}
+ </div>
+ {% endif %}
     </form>
 
-       <!-- Pop-up Messages -->
-       {% if messages %}
-       <div class="container mt-3">
-           {% for message1 in messages %}
-           <div class="alert alert-{{ message1.tags }} alert-dismissible fade show" role="alert">
-               {{ message1 }}
-           </div>
-           {% endfor %}
-       </div>
-       {% endif %}
+      
 
 </div>
 </div>

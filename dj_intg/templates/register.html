@@ -66,22 +66,20 @@
                   <label for="">Confirm password</label>
                   {{form.password2|add_class:"form-control"}}
                 </div>
-                <!-- <div class="mb-4">
-                  <div class="form-check">
-                    <label class="form-check-label text-muted">
-                      <input type="checkbox" class="form-check-input">
-                      I agree to all Terms & Conditions
-                    </label>
-                  </div>
-                </div> -->
 
-                  {% if form.errors %}
-                  <div style="text-align: center;">
-                  <div class="alert alert-danger">
-                    {{form.errors}}
-                  </div>
-                  {% endif %}
-
+                {% if form.errors %}
+                <div class="container mt-3">
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
                   
                 <!-- </div> -->
                 <div style="text-align: center;">

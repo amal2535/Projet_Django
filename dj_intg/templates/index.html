@@ -1,399 +1,121 @@
-<!-- Other HTML pages -->
-
 {% load static %}
-<!-- Other HTML pages -->
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <title>ESPRITSCHED</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'Front1/css/open-iconic-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'Front1/css/animate.css' %}">
-    
     <link rel="stylesheet" href="{% static 'Front1/css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'Front1/css/owl.theme.default.min.css' %}">
     <link rel="stylesheet" href="{% static 'Front1/css/magnific-popup.css' %}">
     <link rel="stylesheet" href="{% static 'Front1/css/aos.css' %}">
     <link rel="stylesheet" href="{% static 'Front1/css/ionicons.min.css' %}">
-    
     <link rel="stylesheet" href="{% static 'Front1/css/flaticon.css' %}">
     <link rel="stylesheet" href="{% static 'Front1/css/icomoon.css' %}">
     <link rel="stylesheet" href="{% static 'Front1/css/style.css' %}">
-
-    <link rel="shortcut icon" href="{% static 'Front2/images/flacon2.png' %}"/>
+    <link rel="shortcut icon" href="{% static 'Front2/images/flacon2.png' %}">
     <style>
-      .button, .center-wrap button button {
-        position: relative;
-        display: inline-block;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        padding: 10px 4px;
-        text-align: center;
-        max-width: 180px;
-        width: 100%;
-        cursor: pointer;
-        border-radius: 4px;
-        overflow: hidden;
-        border: 1px solid #ed1c24;
-        background-color: #ed1c24; /* Couleur rouge */
-        color: #fff; /* Texte blanc */
-    }
-    
-    .button::after, .center-wrap button button::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%; /* Départ en dehors du bouton */
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(45deg, transparent 25%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, transparent 75%);
-        transition: left 0.5s ease-in-out; /* Animation à vitesse moyenne */
-    }
-    
-    .button:hover::after, .center-wrap button button:hover::after {
-        left: 100%; /* Déplacement de la bande à travers le bouton */
-    }
-    /*--------------------------------------------------------------------------*/
-    .btn_sign, .center-wrap .btn_sign {
-    position: relative;
-    display: inline-block;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    padding: 5px 2px; /* Taille du padding réduite pour un bouton plus petit */
-    text-align: center;
-    max-width: 150px; /* Largeur maximale réduite pour un bouton plus petit */
-    width: 100%;
-    cursor: pointer;
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid #ed1c24; /* Bordure rouge */
-    background-color: #ed1c24; /* Couleur de fond rouge */
-    color: #fff; /* Texte blanc */
-    margin-top: 0; /* Réduit la marge en haut pour relever le bouton */
-    margin-left: 80px; /* 30px de marge à gauche */
-    margin-right: 50px; /* Centrage horizontal */
-    margin-bottom: 15px; /* Centrage horizontal */
-}
+      .button, .center-wrap button {
+          position: relative;
+          display: inline-block;
+          text-transform: uppercase;
+          letter-spacing: .5px;
+          padding: 5px 2px;
+          text-align: center;
+          max-width: 150px;
+          width: 100%;
+          cursor: pointer;
+          border-radius: 4px;
+          overflow: hidden;
+          border: 1px solid #ed1c24;
+          background-color: #ed1c24;
+          color: #fff;
+      }
 
-.btn_sign::after, .center-wrap .btn_sign::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%; /* Départ en dehors du bouton */
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(45deg, transparent 25%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, transparent 75%);
-    transition: left 0.5s ease-in-out; /* Animation à vitesse moyenne */
-}
+      .button::after, .center-wrap button::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background-image: linear-gradient(45deg, transparent 25%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, transparent 75%);
+          transition: left 0.5s ease-in-out;
+      }
 
-.btn_sign:hover::after, .center-wrap .btn_sign:hover::after {
-    left: 100%; /* Déplacement de la bande à travers le bouton */
-}
+      .button:hover::after, .center-wrap button:hover::after {
+          left: 100%;
+      }
 
-.btn_sign:not(:last-child) {
-    margin-right: 30px; /* Ajoute un espace seulement entre les boutons, pas après le dernier */
-}
+      .text-primary {
+          color: #ed1c24 !important;
+      }
 
-/* Styles pour maintenir la bordure rouge en état actif et focus */
-.btn_sign:active, .center-wrap .btn_sign:active,
-.btn_sign:focus, .center-wrap .btn_sign:focus {
-    border: 1px solid #ed1c24 !important; /* Force la bordure à rester rouge */
-    outline: none; /* Supprime les contours par défaut */
-}
-
-  .text-primary {
-    color: #ed1c24 !important; /* Remplace la couleur par défaut par rouge */
-  }
-
-    </style>
-
-<script> 
-  function redirectToIndexS() {
-      window.location.href = "{% url 'indexS' %}";
-  }
-
-  function  redirectToLogin() {
-      window.location.href = "{% url 'login' %}";
-  }
-
-</script>
-
-  <style>
-   .button, .center-wrap button {
-    position: relative;
-    display: inline-block;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    padding: 5px 2px; /* Taille du padding réduite pour un bouton plus petit */
-    text-align: center;
-    max-width: 150px; /* Largeur maximale réduite pour un bouton plus petit */
-    width: 100%;
-    cursor: pointer;
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid #ed1c24; /* Bordure rouge */
-    background-color: #ed1c24; /* Couleur de fond rouge */
-    color: #fff; /* Texte blanc */
-}
-
-.button::after, .center-wrap button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%; /* Départ en dehors du bouton */
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(45deg, transparent 25%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.3) 75%, transparent 75%);
-    transition: left 0.5s ease-in-out; /* Animation à vitesse moyenne */
-}
-
-.button:hover::after, .center-wrap button:hover::after {
-    left: 100%; /* Déplacement de la bande à travers le bouton */
-}
-
-.button:not(:last-child) {
-    margin-right: 30px; /* Ajoute un espace seulement entre les boutons, pas après le dernier */
-}
-
-/* Styles pour maintenir la bordure rouge en état actif et focus */
-.button:active, .center-wrap button:active,
-.button:focus, .center-wrap button:focus {
-    border: 1px solid #ed1c24 !important; /* Force la bordure à rester rouge */
-    outline: none; /* Supprime les contours par défaut */
-}
-
-  
   </style>
-  </head>
-  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-    <div class="overlay"></div>
-      
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
-        <div class="container">
+
+  <script>
+      function redirectToLogin() {
+          window.location.href = "{% url 'login' %}";
+      }
+  </script>
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+  <div class="overlay"></div>
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
+      <div class="container">
           <a class="navbar-brand" href="index.html">ESPRIT<span>Sched</span></a>
           <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="oi oi-menu"></span> Menu
+              <span class="oi oi-menu"></span> Menu
           </button>
-          <div class="collapse navbar-collapse" id="ftco-nav">
-            <ul class="navbar-nav nav ml-auto">
-
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <section id="home-section" class="hero">
-        <h3 class="vr">Welcome to ESPRITSCHED</h3>
-          <div class="home-slider js-fullheight owl-carousel">
+         
+      </div>
+  </nav>
+  <section id="home-section" class="hero" >
+      <h3 class="vr">Welcome to ESPRITSCHED</h3>
+      <div class="home-slider js-fullheight owl-carousel" >
           <div class="slider-item js-fullheight">
-            <div class="overlay"></div>
-            <div class="container-fluid p-0">
-              <div class="row d-md-flex no-gutters slider-text js-fullheight align-items-center justify-content-end" data-scrollax-parent="true">
-                <div class="one-third order-md-last img js-fullheight" style="background-image: url('/static/Front1/images/revision10.jpg');">
-
-
-
-                    <div class="overlay"></div>
-                </div>
-                  <div class="one-forth d-flex js-fullheight align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-                    <div class="text">
-                        <span class="subheading">Welcome to the ESPRITSCHED</span>
-                        <h1 class="mb-4 mt-3">Small Details Make A Big <span>Impression</span></h1>
-                        <p>Our platform offers intuitive tools to help you optimize study sessions,making your revision process efficient.</p>
-     
-                       <button type="button" class="button nav-link" id="login-btn" onclick="redirectToLogin()">Login</button> 
-
-                    
-                               
-                        
-                    </div>
+              <div class="container-fluid p-0">
+                  <div class="row d-md-flex no-gutters slider-text js-fullheight align-items-center justify-content-end" data-scrollax-parent="true">
+                      <div class="one-third order-md-last img js-fullheight" style="background-image: url('/static/Front1/images/revision10.jpg');">
+                          <div class="overlay"></div>
+                      </div>
+                      <div class="one-forth d-flex js-fullheight align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+                          <div class="text">
+                              <span class="subheading">Welcome to the ESPRITSCHED</span>
+                              <h1 class="mb-4 mt-3">Small Details Make A Big <span>Impression</span></h1>
+                              <p>Our platform offers intuitive tools to help you optimize study sessions, making your revision process efficient.</p>
+                              <button type="button" class="button nav-link" id="login-btn" onclick="redirectToLogin()">Login</button>
+                          </div>
+                      </div>
                   </div>
-                </div>
-            </div>
+              </div>
           </div>
           <div class="slider-item js-fullheight">
-            <div class="overlay"></div>
-            <div class="container-fluid p-0">
-              <div class="row d-flex no-gutters slider-text js-fullheight align-items-center justify-content-end" data-scrollax-parent="true">
-                <div class="one-third order-md-last img js-fullheight" style="background-image: url('/static/Front1/images/revision9.jpg');">
-
-                    <div class="overlay"></div>
-                </div>
-                  <div class="one-forth d-flex js-fullheight align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-                    <div class="text">
-                        <span class="subheading">Welcome to the ESPRITSCHED</span>
-                          
-                        <h1 class="mb-4 mt-3"><span>Success</span> is the sum of small <span>efforts</span> </h1>
-                        <p>Empower your academic journey by crafting a tailored revision schedule.</p>
-                        
-                        <!-- <button type="button" class="button" onclick="location.href='C:/Users/Farah/Desktop/digilab-master2/skydash-free-bootstrap-admin-template-main/template/index.html'">Start</button> -->
-                        
-                      <button type="button" class="button nav-link" id="login-btn" onclick="redirectToLogin()">Login</button>
-
-                      
-<!-- <p><a href="C:\Users\Farah\Desktop\digilab-master2\skydash-free-bootstrap-admin-template-main\template\index.html" class="btn btn-primary px-5 py-3 mt-3" class="btn btn-primary px-5 py-3 mt-3">Get in touch</a></p> -->
-                    </div>
+              <div class="overlay"></div>
+              <div class="container-fluid p-0">
+                  <div class="row d-flex no-gutters slider-text js-fullheight align-items-center justify-content-end" data-scrollax-parent="true">
+                      <div class="one-third order-md-last img js-fullheight" style="background-image: url('/static/Front1/images/revision9.jpg');">
+                          <div class="overlay"></div>
+                      </div>
+                      <div class="one-forth d-flex js-fullheight align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+                          <div class="text">
+                              <span class="subheading">Welcome to the ESPRITSCHED</span>
+                              <h1 class="mb-4 mt-3"><span>Success</span> is the sum of small <span>efforts</span> </h1>
+                              <p>Empower your academic journey by crafting a tailored revision schedule.</p>
+                              <button type="button" class="button nav-link" id="login-btn" onclick="redirectToLogin()">Login</button>
+                          </div>
+                      </div>
                   </div>
-                </div>
-            </div>
+              </div>
           </div>
-        </div>
-    </section>
-        
-   
-<script>
-function displayLoginForm(event) {
-    // Prevent the default link behavior
-    event.preventDefault();
-
-
-    // Select the popup element
-    var loginPopup = document.querySelector('.login-popup');
+      </div>
+  </section>
     
-    // Toggle the 'show' class to show/hide the popup
-    loginPopup.classList.toggle('show');
-}
-
-
-function sign_up(){
-  var inputs = document.querySelectorAll('.input_form_sign');
-document.querySelectorAll('.ul_tabs > li')[0].className=""; 
-document.querySelectorAll('.ul_tabs > li')[1].className="active"; 
-  
-  for(var i = 0; i < inputs.length ; i++  ) {
-if(i == 2  ){
-
-
-}else{  
-document.querySelectorAll('.input_form_sign')[i].className = "input_form_sign d_block";
-}
-} 
-
-
-setTimeout( function(){
-for(var d = 0; d < inputs.length ; d++  ) {
- document.querySelectorAll('.input_form_sign')[d].className = "input_form_sign d_block active_inp";  
-   }
-
-
-
- },100 );
- document.querySelector('.link_forgot_pass').style.opacity = "0";
-   document.querySelector('.link_forgot_pass').style.top = "-5px";
-   document.querySelector('.btn_sign').innerHTML = "SIGN UP";    
-  setTimeout(function(){
-
-
- document.querySelector('.terms_and_cons').style.opacity = "1";
-  document.querySelector('.terms_and_cons').style.top = "5px";
- 
-  },500);
-  setTimeout(function(){
-    document.querySelector('.link_forgot_pass').className = "link_forgot_pass d_none";
- document.querySelector('.terms_and_cons').className = "terms_and_cons d_block";
-  },450);
-
-
-}
-
-function sign_in(){
-  var inputs = document.querySelectorAll('.input_form_sign');
-document.querySelectorAll('.ul_tabs > li')[0].className = "active"; 
-document.querySelectorAll('.ul_tabs > li')[1].className = ""; 
-  
-  for(var i = 0; i < inputs.length ; i++  ) {
-switch(i) {
-    case 1:
- console.log(inputs[i].name);
-        break;
-    case 2:
- console.log(inputs[i].name);
-    default: 
-document.querySelectorAll('.input_form_sign')[i].className = "input_form_sign d_block";
-}
-} 
-
-setTimeout( function(){
-for(var d = 0; d < inputs.length ; d++  ) {
-switch(d) {
-    case 1:
- console.log(inputs[d].name);
-        break;
-    case 2:
- console.log(inputs[d].name);
-
-
-    default:
- document.querySelectorAll('.input_form_sign')[d].className = "input_form_sign d_block";  
- document.querySelectorAll('.input_form_sign')[2].className = "input_form_sign d_block active_inp";  
-
-
-   }
-  }
- },100 );
-
-
- document.querySelector('.terms_and_cons').style.opacity = "0";
-  document.querySelector('.terms_and_cons').style.top = "-5px";
-
-
-  setTimeout(function(){
- document.querySelector('.terms_and_cons').className = "terms_and_cons d_none"; 
-document.querySelector('.link_forgot_pass').className = "link_forgot_pass d_block";
-
-
- },500);
-
-
-  setTimeout(function(){
-
-
- document.querySelector('.link_forgot_pass').style.opacity = "1";
-   document.querySelector('.link_forgot_pass').style.top = "5px";
-    
-
-
-for(var d = 0; d < inputs.length ; d++  ) {
-
-
-switch(d) {
-    case 1:
- console.log(inputs[d].name);
-        break;
-    case 2:
- console.log(inputs[d].name);
-
-
-         break;
-    default:
- document.querySelectorAll('.input_form_sign')[d].className = "input_form_sign";  
-}
-  }
-   },1500);
-   document.querySelector('.btn_sign').innerHTML = "SIGN IN";    
-}
-
-
-
-window.onload =function(){
-  document.querySelector('.cont_centrar').className = "cont_centrar cent_active";
-
-}
-
-</script>
-
-
-
-
-
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
-
-  <script src="{% static 'Front1/js/jquery.min.js' %}"></script>
+    <script src="{% static 'Front1/js/jquery.min.js' %}"></script>
     <script src="{% static 'Front1/js/jquery-migrate-3.0.1.min.js' %}"></script>
     <script src="{% static 'Front1/js/popper.min.js' %}"></script>
     <script src="{% static 'Front1/js/bootstrap.min.js' %}"></script>
@@ -408,6 +130,5 @@ window.onload =function(){
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&sensor=false"></script>
     <script src="{% static 'Front1/js/google-map.js' %}"></script>
     <script src="{% static 'Front1/js/main.js' %}"></script>
-    
-  </body>
+</body>
 </html>

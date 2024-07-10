@@ -22,30 +22,21 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static 'Front2/images/flacon2.png' %}" />
 <style>
-    form {
-        width: 500px;
-        padding: 20px;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        margin: 30px auto;
+    form{
+        width: 600px;
+        height: 400px;
+        padding: 20px 20px 20px 20px;
+        margin: 50px auto;
         border-radius: 10px;
-        background: #fff;
     }
-
-    form p {
+    form p{
         text-align: center;
     }
 
-    form h3 {
-        text-align: center;
+    form h3{
+        text-align: center
     }
-
-    .form-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: calc(100vh - 200px); 
-        padding: 20px;
-    }
+        
   
 </style>
 
@@ -54,13 +45,14 @@
       <div class="content-wrapper d-flex align-items-center auth px-0 bg-image " style="background-image: url('/static/Front2/images/bg.png'); background-repeat: no-repeat;background-size: cover; background-position: center;">
         <div class="row w-100 mx-0">
           <div class="col-lg-4 mx-auto">
-            <div class="auth-form-light text-left py-5 px-4 px-sm-5  rounded shadow-lg ">
-              <div class="brand-logo">
-                <img src="{% static 'Front1/images/logo2.png' %}" alt="logo">
-              </div>
-<div class="form-container">
+            
+<div class="form-container bg-light  rounded shadow-lg ">
+   
     <form action="" method='POST'>
         {% csrf_token %}
+        <div class="brand-logo">
+            <img src="{% static 'Front1/images/logo2.png' %}" alt="logo">
+          </div>
         <h3><strong>Verify Email</strong></h3>
         <div class="mb-3">
             <label class="form-label">OTP</label>
@@ -71,23 +63,24 @@
         </div>
         <br>
         <p>Need a new OTP? <a href="{% url 'resend-otp' %}">Resend OTP</a></p>
+
+        {% if messages %}
+        <div class="container mt-3">
+            {% for message2 in messages %}
+            <div class="alert alert-{{ message2.tags }} alert-dismissible fade show" role="alert">
+                {{ message2 }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </form>
- 
+  
 
 </div>
   <!-- Pop-up Messages -->
-  {% if messages %}
-  <div class="container mt-3">
-      {% for message2 in messages %}
-      <div class="alert alert-{{ message2.tags }} alert-dismissible fade show" role="alert">
-          {{ message2 }}
-      </div>
-      {% endfor %}
-  </div>
-  {% endif %}
-</div>
-</div>
 
+</div>
+</div>
 </div>
 <!-- content-wrapper ends -->
 </div>

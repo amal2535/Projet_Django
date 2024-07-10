@@ -57,6 +57,7 @@ def get_color(progress_value):
     else:
         return '#FFBF00'  # yellow
 
+
 @login_required
 def dashboard1(request):
     progresses = Progress.objects.filter(user=request.user)
@@ -90,11 +91,8 @@ def dashboard1(request):
 
     return render(request, 'indexS.html', context)
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 
 def dashboard(request, *args, **kwargs):
-
     return render(request, 'index.html')
 
 def indexS(request):
@@ -148,7 +146,7 @@ def verify_email(request, username):
 
     return render(request, "verify_token.html", {})
 
-@login_required
+
 def resend_otp(request):
     if request.method == 'POST':
         user_email = request.POST.get("otp_email")
@@ -209,7 +207,6 @@ def logout_view(request):
     messages.info(request, "You have been logged out successfully.")
     return redirect("login")
 
-@login_required
 def password_reset_request(request):
     if request.method == 'POST':
         form = PasswordResetRequestForm(request.POST)
@@ -240,7 +237,6 @@ def password_reset_request(request):
         form = PasswordResetRequestForm()
     return render(request, 'password_reset_request.html', {'form': form})
 
-@login_required
 def password_reset_confirm(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -356,6 +352,20 @@ matiere_names = {
     '38': "Théorie des langages(TLA)"
 }
 
+
+@login_required
+def calendar_view(request):
+    context = {
+        'prediction_made': request.GET.get('prediction_made', 'False') == 'True',
+        'predh': request.GET.get('predh', ''),
+        'matiere': request.GET.get('matiere', ''),
+        'start_date': request.GET.get('start_date', ''),
+        'end_date': request.GET.get('end_date', ''),
+        'date_exam': request.GET.get('date_exam', ''),
+        'demi_journee': request.GET.get('demi_journee', 'False') == 'True',
+    }
+    return render(request, 'calendar.html', context)
+
 @login_required
 def examSchedule(request):
     predh = None
@@ -374,6 +384,7 @@ def examSchedule(request):
         coefficient = request.POST.get('coefficient')
         debut_revision_str = request.POST.get('debut_revision')
         date_examen_str = request.POST.get('date_examen')
+
         def clean_input(value):
             return ''.join(filter(str.isdigit, value))
 
@@ -433,7 +444,6 @@ def examSchedule(request):
             hours_predicted=heures_restantes,
             days_suivi=0,
             hours_suivi=0,
-            #jours_rev=difference_jours
         )
         progress_instance.save()
 
@@ -449,9 +459,6 @@ def examSchedule(request):
         })
     
     return render(request, 'examSchedule.html')
-
-
-
 @login_required
 def formProgress(request):
     user_progress = Progress.objects.filter(user=request.user)
@@ -463,12 +470,8 @@ def formProgress(request):
 
 
 def deletedata(request, id):
-    try:
-        progress = Progress.objects.get(id=id)
-        progress.delete()
-        messages.success(request, "Matière supprimée avec succès.")
-    except Progress.DoesNotExist:
-        messages.error(request, "La matière à supprimer n'existe pas.")
+    progress = Progress.objects.get(id=id)
+    progress.delete()
     return redirect('formProgress')
 
 
