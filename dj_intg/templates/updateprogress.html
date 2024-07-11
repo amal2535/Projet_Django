@@ -69,15 +69,8 @@
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <div class="info-card">
-                                        {% if user_progress.days_predicted == 0 %}
-                                            <p class="font-weight-bold">Revision Prediction: {{ user_progress.hours_predicted }} hours</p>
-                                        {% endif %}
-                                        {% if user_progress.days_predicted == 1 %}
-                                            <p class="font-weight-bold">Revision Prediction: {{ user_progress.days_predicted }} day, {{ user_progress.hours_predicted }} hours</p>
-                                        {% endif %}
-                                        {% if user_progress.days_predicted > 1 %}
-                                            <p class="font-weight-bold">Revision Prediction: {{ user_progress.days_predicted }} days, {{ user_progress.hours_predicted }} hours</p>
-                                        {% endif %}
+                                            <p class="font-weight-bold">Revision Prediction:{{ user_progress.predh}}</p>
+                                    
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-4">

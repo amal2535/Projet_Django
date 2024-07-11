@@ -77,5 +77,9 @@ class Progress(models.Model):
     days_suivi = models.IntegerField()
     hours_suivi = models.IntegerField()
     progressvalue = models.FloatField(default=0) 
+    demi_journee = models.BooleanField(default=False)
+    predh = models.CharField(max_length=50, default='')
+
+
     def __str__(self):
         return f"{self.user.username} - {self.matiere} - Exam Date: {self.exam_date}"

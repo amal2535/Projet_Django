@@ -413,20 +413,59 @@ def calendar_view(request):
         end_date = progress.revision_start_date + timedelta(days=progress.days_predicted)
         matiere_color = matiere_colors.get(progress.matiere, '#f4511e')
 
-        events.append({
-            'title': f'Révision {progress.matiere}',
-            'start': start_date.isoformat(),
-            'end': end_date.isoformat(),
-            'backgroundColor': matiere_color,
-            'allDay': True,
-        })
-        events.append({
-            'title': f'Examen {progress.matiere}',
-            'start': progress.exam_date.isoformat(),
-            'end': progress.exam_date.isoformat(),
-            'backgroundColor': matiere_color,
-            'allDay': True,
-        })
+        # Check for demi-journée condition
+        if progress.predh == 'demi-journée':
+            events.append({
+                'title': f'Demi Journée ({progress.matiere})',
+                'start': start_date.isoformat(),
+                'end': end_date.isoformat(),
+                'backgroundColor': matiere_color,
+                'allDay': True,
+            })
+            events.append({
+                'title': f'Examen {progress.matiere}',
+                'start': progress.exam_date.isoformat(),
+                'end': progress.exam_date.isoformat(),
+                'backgroundColor': matiere_color,
+                'allDay': True,
+            })
+        elif progress.demi_journee == True:
+            events.append({
+                'title': f'Révision {progress.matiere}',
+                'start': start_date.isoformat(),
+                'end': end_date.isoformat(),
+                'backgroundColor': matiere_color,
+                'allDay': True,
+            })
+            events.append({
+                'title': 'Demi Journée',
+                'start': end_date.isoformat(),
+                'end': end_date.isoformat(),
+                'backgroundColor': matiere_color,
+                'allDay': True,
+            })
+            events.append({
+                'title': f'Examen {progress.matiere}',
+                'start': progress.exam_date.isoformat(),
+                'end': progress.exam_date.isoformat(),
+                'backgroundColor': matiere_color,
+                'allDay': True,
+            })
+        else:
+            events.append({
+                'title': f'Révision {progress.matiere}',
+                'start': start_date.isoformat(),
+                'end': end_date.isoformat(),
+                'backgroundColor': matiere_color,
+                'allDay': True,
+            })
+            events.append({
+                'title': f'Examen {progress.matiere}',
+                'start': progress.exam_date.isoformat(),
+                'end': progress.exam_date.isoformat(),
+                'backgroundColor': "#228B22",
+                'allDay': True,
+            })
 
     context = {
         'events': json.dumps(events),
@@ -492,11 +531,11 @@ def examSchedule(request):
 
         if demi_journee:
             if jours == 0:
-                predh = "demi-journée"
+                predh_str = "demi-journée"
             else:
-                predh = f"{jours} jours et demi-journée"
+                predh_str = f"{jours} jours et demi-journée"
         else:
-            predh = f"{jours} jours"
+            predh_str = f"{jours} jours"
 
         start_date = debut_revision.date()
         end_date = start_date + timedelta(days=jours)
@@ -511,12 +550,14 @@ def examSchedule(request):
             hours_predicted=heures_restantes,
             days_suivi=0,
             hours_suivi=0,
+            demi_journee=demi_journee,
+            predh=predh_str
         )
         progress_instance.save()
 
         prediction_made = True
         return render(request, 'examSchedule.html', {
-            'predh': predh,
+            'predh': predh_str,
             'prediction_made': prediction_made,
             'start_date': start_date,
             'end_date': end_date,
@@ -526,7 +567,6 @@ def examSchedule(request):
         })
     
     return render(request, 'examSchedule.html')
-
 
 @login_required
 def formProgress(request):
